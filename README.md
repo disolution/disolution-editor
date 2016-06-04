@@ -1,5 +1,5 @@
-# Disolution App
-#### Easy management of open collaboration projects
+# Disolution
+#### Easily create and manage DOCN projects
 
 The idea starts off simple - to build a free and open-source multi-purpose offline and online project editor in javascript.
 There is lots to do.
