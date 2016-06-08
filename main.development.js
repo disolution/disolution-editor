@@ -17,10 +17,13 @@ app.on('window-all-closed', () => {
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
-    show: false,
+    title: 'Disolution',
+    show: true,
     width: 1024,
     height: 728,
-    titleBarStyle: 'hidden',
+    minWidth: 600,
+    minHeight: 500,
+    titleBarStyle: 'hidden-inset',
     frame: false
   });
 

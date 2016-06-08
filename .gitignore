@@ -2,6 +2,9 @@
 logs
 *.log
 
+# Personal notes
+*.notes
+
 # Runtime data
 pids
 *.pid

@@ -1,14 +1,19 @@
-/*@import '../node_modules/photonui/dist/photonui-base.css';
-@import '../node_modules/photonui/dist/photonui-theme-particle.css';*/
+@import '../node_modules/simplemde/dist/simplemde.min.css';
 
 body {
+  margin: 0;
   position: relative;
-  color: white;
-  height: 100vh;
-  background-color: #232C39;
-  background-image: linear-gradient(45deg, rgba(0, 216, 255, .5) 10%, rgba(0, 1, 127, .7));
+  color: black;
+  background-color: rgb(217, 217, 217);
   font-family: Arial, Helvetica, Helvetica Neue;
-  overflow-y: hidden;
+}
+
+.appbar-title {
+  height: 100%;
+  display: block;
+  cursor: pointer;
+  font-size: .6em;
+  text-align: center;
 }
 
 h2 {
@@ -37,4 +42,25 @@ a:hover {
   opacity: 1;
   text-decoration: none;
   cursor: pointer;
+}
+
+.sticky {
+  z-index: 10;
+}
+.editor-toolbar:not(.fullscreen) {
+  border: 0;
+  padding: 0;
+}
+
+.editor-toolbar.fullscreen {
+  top: 60px;
+}
+
+.CodeMirror:not(.CodeMirror-fullscreen) {
+  border: 0;
+  padding: 0;
+}
+
+.CodeMirror-fullscreen {
+  top: 110px;
 }
