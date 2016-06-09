@@ -9,14 +9,24 @@ class MarkdownArea extends React.Component {
     onChange: React.PropTypes.func
   };
 
+  state = {
+    value: undefined
+  };
+
   componentDidMount() {
-    const allOptions = { element: this._textarea, ...(this.props.options || {})};
+    const { props: { options, value, onChange }, _textarea } = this;
+    const allOptions = { element: _textarea, ...(options || {})};
     let simplemde = this.simplemde = new SimpleMDE(allOptions);
 
-    if(simplemde && simplemde.codemirror && this.props.onChange) {
-      simplemde.codemirror.on("change", () => {
-        this.props.onChange(simplemde.value());
-      });
+    if(simplemde) {
+      simplemde.value(value);
+      if( simplemde.codemirror && onChange ) {
+        simplemde.codemirror.on("change", (ar, arr) => {
+          let value = simplemde.value();
+          this.setState({ value });
+          onChange(value);
+        });
+      }
     }
   }
 
@@ -29,13 +39,15 @@ class MarkdownArea extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.simplemde.value(nextProps.value);
+    let { state: { value }, props: { value: defaultValue } } = this;
+    if(nextProps.value && (value !== nextProps.value && nextProps.value !== defaultValue)) {
+      this.simplemde.value(nextProps.value);
+    }
   }
 
   render () {
-    const { props: { value } } = this;
     return (
-      <textarea ref={(c) => this._textarea = c}>{value}</textarea>
+      <textarea ref={(c) => this._textarea = c} />
     );
   }
 }

@@ -1,11 +1,32 @@
-import { INCREMENT_COUNTER, DECREMENT_COUNTER } from '../actions/projects';
+import { ADD_PROJECT, SAVE_PROJECT } from '../actions/projects';
 
-export default function projects(state = 0, action) {
+export function project(state = {}, action) {
   switch (action.type) {
-    case INCREMENT_COUNTER:
-      return state + 1;
-    case DECREMENT_COUNTER:
-      return state - 1;
+    case ADD_PROJECT:
+      return action.project;
+    case SAVE_PROJECT:
+      if(state.id !== action.project.id) {
+        return state;
+      }
+
+      return {
+        ...state,
+        ...action.project
+      };
+    default:
+      return state;
+  }
+}
+
+export function projects(state = [], action) {
+  switch (action.type) {
+    case ADD_PROJECT:
+      return [
+        ...state,
+        project(undefined, action)
+      ];
+    case SAVE_PROJECT:
+      return state.map(p => project(p, action));
     default:
       return state;
   }

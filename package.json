@@ -2,7 +2,7 @@
   "name": "disolution-app",
   "productName": "Disolution",
   "version": "0.0.1",
-  "description": "DOCN project editor and collaboration client",
+  "description": "DOCN git projects editor and viewer",
   "main": "main.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --compilers js:babel-register --recursive --require ./test/setup.js test/**/*.spec.js",
@@ -27,16 +27,19 @@
     "type": "git",
     "url": "git+https://github.com/disolution/disolution-app.git"
   },
-  "author": "Henry <henry@blooob.me> (https://github.com/madhenry)",
+  "author": "Henry Kehlmann <henry@blooob.me> (https://github.com/madhenry)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/disolution/disolution-app/issues"
   },
   "keywords": [
+    "disolution",
+    "projects",
+    "nodegit",
     "electron",
-    "boilerplate",
     "react",
     "react-router",
+    "docn",
     "flux",
     "webpack",
     "react-hot"

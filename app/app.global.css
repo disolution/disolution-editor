@@ -36,6 +36,7 @@ a {
   color: white;
   opacity: .75;
   text-decoration: none;
+  cursor: pointer;
 }
 
 a:hover {
@@ -47,6 +48,7 @@ a:hover {
 .sticky {
   z-index: 10;
 }
+
 .editor-toolbar:not(.fullscreen) {
   border: 0;
   padding: 0;

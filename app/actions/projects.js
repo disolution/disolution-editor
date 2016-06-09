@@ -1,34 +1,36 @@
-export const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
-export const DECREMENT_COUNTER = 'DECREMENT_COUNTER';
+export const ADD_PROJECT = 'ADD_PROJECT';
+export const SAVE_PROJECT = 'SAVE_PROJECT';
 
-export function increment() {
+export function add(project) {
   return {
-    type: INCREMENT_COUNTER
+    type: ADD_PROJECT,
+    project
   };
 }
 
-export function decrement() {
+export function save(project) {
   return {
-    type: DECREMENT_COUNTER
+    type: SAVE_PROJECT,
+    project
   };
 }
 
-export function incrementIfOdd() {
-  return (dispatch, getState) => {
-    const { projects } = getState();
-
-    if (projects % 2 === 0) {
-      return;
-    }
-
-    dispatch(increment());
-  };
-}
-
-export function incrementAsync(delay = 1000) {
-  return dispatch => {
-    setTimeout(() => {
-      dispatch(increment());
-    }, delay);
-  };
-}
+// export function incrementIfOdd() {
+//   return (dispatch, getState) => {
+//     const { projects } = getState();
+//
+//     if (projects % 2 === 0) {
+//       return;
+//     }
+//
+//     dispatch(increment());
+//   };
+// }
+//
+// export function incrementAsync(delay = 1000) {
+//   return dispatch => {
+//     setTimeout(() => {
+//       dispatch(increment());
+//     }, delay);
+//   };
+// }
