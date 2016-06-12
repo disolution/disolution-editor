@@ -29,7 +29,6 @@ export default {
   externals: [
     {
       nodegit: 'commonjs nodegit',
-      'nodegit-promise': 'commonjs nodegit-promise',
       lowdb: 'commonjs lowdb',
       localForage: 'commonjs localForage'
     }
