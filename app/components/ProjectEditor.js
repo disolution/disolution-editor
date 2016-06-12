@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link, hashHistory } from 'react-router';
 import FormsyMarkdown from './FormsyMarkdown.js';
 import { Form } from 'formsy-react';
 import { FormsyText as Text } from 'formsy-material-ui/lib';
 import ImageIcon from 'material-ui/svg-icons/image/add-a-photo';
 
+import styles from './ProjectEditorStyles';
 import { askFolderPath } from '../utils/folders';
 
 import {
@@ -22,65 +23,17 @@ const props = {
   }
 };
 
-const styles = {
-  container: {
-    padding: '1em',
-    paddingTop: '.5em'
-  },
-  inputs: {
-    width: '100%'
-  },
-  title: {
-    fontSize: '2em',
-    height: '2em',
-    lineHeight: '1.1em',
-    paddingBottom: 10
-  },
-  titleHint: {
-    fontSize:'.8em',
-    bottom:20
-  },
-  coverImage: {
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    height: 200,
-    borderRadius: '4px 4px 0 0'
-  },
-  exampleImageInput: {
-    cursor: 'pointer',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    width: '100%',
-    opacity: 0,
-  }
-};
-
 export default class ProjectEditor extends Component {
   state = {
     canSubmit: false,
-    coverImage: '',
-    editing: false
+    coverImage: ''
   };
 
-  componentDidMount() {
-    const { props: { project } } = this;
-    if(project.id) {
-      this.setState({
-        coverImage: project.coverImage,
-        editing: true
-      });
-    }
-  }
-
   static propTypes = {
-    projects: React.PropTypes.array,
-    project: React.PropTypes.object,
-    add: React.PropTypes.func,
-    save: React.PropTypes.func,
+    projects: PropTypes.array,
+    project: PropTypes.object,
+    add: PropTypes.func,
+    save: PropTypes.func,
   };
 
   static defaultProps = {
@@ -88,18 +41,33 @@ export default class ProjectEditor extends Component {
     project: {}
   };
 
+  componentWillReceiveProps(nextProps) {
+    const { project } = nextProps;
+    this.form.reset();
+    this.setState({
+      coverImage: project.coverImage || ''
+    });
+  }
+
+  componentDidMount() {
+    const { props: { project } } = this;
+    this.setState({
+      coverImage: project.coverImage || '',
+    });
+  }
+
   submit(data, resetForm) {
     const { title, article } = data;
     const {
       form,
       props: { add, save, projects, project },
-      state: { coverImage, editing }
+      state: { coverImage }
     } = this;
 
     // let projectPath = askFolderPath();
     // console.log("projectPath received", projectPath);
 
-    const addOrSave = editing ? save : add;
+    const addOrSave = project.id ? save : add;
     addOrSave({
       id: project.id || (projects.length + 1).toString(),
       title,
@@ -128,7 +96,7 @@ export default class ProjectEditor extends Component {
   render() {
     const {
       props: { project },
-      state: { editing, coverImage }
+      state: { coverImage }
     } = this;
 
     return (
@@ -141,12 +109,13 @@ export default class ProjectEditor extends Component {
         : '' }
         <Paper zDepth={1} style={styles.container}>
           <Form
+            ref={el => this.form = el}
             onSubmit={this.submit.bind(this)}
             onValid={this.enableButton.bind(this)}
             onInvalid={this.disableButton.bind(this)}>
             <Text
               name="title"
-              defaultValue={project.title || ''}
+              value={project.title || ''}
               style={{...styles.inputs, ...styles.title}}
               multiLine={true}
               maxRows={3}

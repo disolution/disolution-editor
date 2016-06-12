@@ -1,5 +1,6 @@
 export const ADD_PROJECT = 'ADD_PROJECT';
 export const SAVE_PROJECT = 'SAVE_PROJECT';
+export const REMOVE_PROJECT = 'REMOVE_PROJECT';
 
 export function add(project) {
   return {
@@ -11,6 +12,13 @@ export function add(project) {
 export function save(project) {
   return {
     type: SAVE_PROJECT,
+    project
+  };
+}
+
+export function remove(project) {
+  return {
+    type: REMOVE_PROJECT,
     project
   };
 }
