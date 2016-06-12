@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import { MarkdownPreview } from 'react-marked-markdown';
 
 import {
   RaisedButton as Button,
@@ -35,7 +36,7 @@ export default class ProjectViewer extends Component {
         : '' }
         <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
           <h1>{project.title}</h1>
-          <p>{project.article}</p>
+          <MarkdownPreview value={project.article}/>
         </Paper>
       </div>
     );

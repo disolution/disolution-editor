@@ -11,6 +11,7 @@ const del = require('del');
 const exec = require('child_process').exec;
 const argv = require('minimist')(process.argv.slice(2));
 const pkg = require('./package.json');
+const series = require('es6-promise-series');
 const deps = Object.keys(pkg.dependencies);
 const devDeps = Object.keys(pkg.devDependencies);
 
@@ -69,11 +70,34 @@ function build(cfg) {
   });
 }
 
+function getAllTargets() {
+  const allVersions = [];
+  const archs = ['ia32', 'x64'];
+  const platforms = ['linux', 'win32', 'darwin'];
+
+  platforms.forEach(platform => {
+    archs.forEach(arch => {
+      if (!(platform === 'darwin' && arch === 'ia32')) { // darwin 32 does not exist
+        allVersions.push({platform, arch})
+      }
+    });
+  });
+  return allVersions;
+}
+
+function installNodeGit(target) {
+  console.log(`Installing nodegit for ${target.platform}-${target.arch}`);
+  return pexec(`npm i nodegit --target_arch=${target.arch} --target_platform=${target.platform}`);
+}
+
 function startPack() {
   console.log('start pack...');
   build(electronCfg)
     .then(() => build(cfg))
     .then(() => del('release'))
+    // .then(() => {
+    //   return series(getAllTargets().map(target => () => installNodeGit()));
+    // })
     .then(paths => {
       if (shouldBuildAll) {
         // build for all platforms

@@ -82,17 +82,20 @@
     "minimist": "^1.2.0",
     "mocha": "^2.5.3",
     "node-libs-browser": "^1.0.0",
+    "node-loader": "github:webpack/node-loader#pull/1/head",
     "react-addons-test-utils": "^15.1.0",
     "redux-devtools": "^3.3.1",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.0.11",
     "redux-logger": "^2.6.1",
     "selenium-webdriver": "^2.53.2",
+    "semver": "^5.1.0",
     "sinon": "^1.17.4",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1",
     "webpack-dev-middleware": "^1.6.1",
-    "webpack-hot-middleware": "^2.10.0"
+    "webpack-hot-middleware": "^2.10.0",
+    "webpack-node-externals": "^1.2.0"
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -110,6 +113,7 @@
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-flexbox-grid": "^0.9.6",
+    "react-marked-markdown": "^1.4.0",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.1",
     "react-router-redux": "^4.0.4",
@@ -121,7 +125,7 @@
     "source-map-support": "^0.4.0"
   },
   "engines": {
-    "electron": "1.2.1"
+    "electron": "1.2.0"
   },
   "devEngines": {
     "node": "4.x || 5.x || 6.x",

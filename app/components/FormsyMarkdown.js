@@ -6,6 +6,11 @@ const FormsyMarkdown = React.createClass({
   mixins: [Formsy.Mixin],
   changeValue(value) {
     this.setValue(value);
+
+    const { props: { onChange } } = this
+    if(onChange) {
+      onChange(value);
+    }
   },
   render() {
     const className = this.showRequired() ? 'required' : this.showError() ? 'error' : null;
@@ -13,7 +18,7 @@ const FormsyMarkdown = React.createClass({
 
     return (
       <div className={className}>
-        <MarkdownArea onChange={this.changeValue} {...this.props}/>
+        <MarkdownArea {...this.props} value={this.getValue()} onChange={this.changeValue} />
         <span>{errorMessage}</span>
       </div>
     );

@@ -3,6 +3,9 @@ import path from 'path';
 export default {
   module: {
     loaders: [{
+      test: /\.node$/,
+      loaders: ['node-loader']
+    }, {
       test: /\.jsx?$/,
       loaders: ['babel-loader'],
       exclude: /node_modules/
@@ -24,7 +27,9 @@ export default {
 
   ],
   externals: [
-    // put your node 3rd party libraries which can't be built with webpack here
-    // (mysql, mongodb, and so on..)
+    {
+      nodegit: 'commonjs nodegit',
+      'nodegit-promise': 'commonjs nodegit-promise'
+    }
   ]
 };

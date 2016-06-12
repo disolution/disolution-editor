@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link, hashHistory } from 'react-router';
 import FormsyMarkdown from './FormsyMarkdown.js';
 import { Form } from 'formsy-react';
 import { FormsyText as Text } from 'formsy-material-ui/lib';
 import ImageIcon from 'material-ui/svg-icons/image/add-a-photo';
 
+import { askFolderPath } from '../utils/folders';
 
 import {
   RaisedButton as Button,
@@ -87,12 +88,17 @@ export default class ProjectEditor extends Component {
     project: {}
   };
 
-  submit(data) {
+  submit(data, resetForm) {
     const { title, article } = data;
     const {
+      form,
       props: { add, save, projects, project },
       state: { coverImage, editing }
     } = this;
+
+    // let projectPath = askFolderPath();
+    // console.log("projectPath received", projectPath);
+
     const addOrSave = editing ? save : add;
     addOrSave({
       id: project.id || (projects.length + 1).toString(),
@@ -100,6 +106,8 @@ export default class ProjectEditor extends Component {
       article,
       coverImage
     });
+    resetForm();
+    hashHistory.push('/');
   }
   enableButton() {
     this.setState({ canSubmit: true });
@@ -132,12 +140,13 @@ export default class ProjectEditor extends Component {
           <div style={{backgroundImage: 'url('+coverImage+')', ...styles.coverImage}} />
         : '' }
         <Paper zDepth={1} style={styles.container}>
-          <Form onSubmit={this.submit.bind(this)}
+          <Form
+            onSubmit={this.submit.bind(this)}
             onValid={this.enableButton.bind(this)}
             onInvalid={this.disableButton.bind(this)}>
             <Text
               name="title"
-              value={project.title || ''}
+              defaultValue={project.title || ''}
               style={{...styles.inputs, ...styles.title}}
               multiLine={true}
               maxRows={3}
@@ -146,7 +155,7 @@ export default class ProjectEditor extends Component {
               {...props.inputs} />
             <FormsyMarkdown
               name="article"
-              value={project.article || undefined}
+              value={project.article || ''}
               options={{spellChecker: false, placeholder: 'Description'}}
               {...props.inputs} />
             <Button type="submit"

@@ -40,8 +40,9 @@ class MarkdownArea extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let { state: { value }, props: { value: defaultValue } } = this;
-    if(nextProps.value && (value !== nextProps.value && nextProps.value !== defaultValue)) {
-      this.simplemde.value(nextProps.value);
+
+    if(value !== nextProps.value && nextProps.value !== defaultValue) {
+      this.simplemde.value(nextProps.value ? nextProps.value : '');
     }
   }
 

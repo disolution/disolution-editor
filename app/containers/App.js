@@ -13,6 +13,8 @@ const muiTheme = getMuiTheme({
   }
 });
 
+import Notifications from './Notifications';
+
 export default class App extends Component {
 
   constructor(props) {
@@ -56,7 +58,7 @@ export default class App extends Component {
                 }
               />
             </Sticky>
-
+            <Notifications />
             <div>
               {this.props.children}
             </div>
