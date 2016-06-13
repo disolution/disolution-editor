@@ -6,7 +6,8 @@ import { FormsyText as Text } from 'formsy-material-ui/lib';
 import ImageIcon from 'material-ui/svg-icons/image/add-a-photo';
 
 import styles from './ProjectEditorStyles';
-import { askFolderPath } from '../utils/folders';
+import * as folders from '../utils/folders';
+import uuid from 'node-uuid';
 
 import {
   RaisedButton as Button,
@@ -26,7 +27,9 @@ const props = {
 export default class ProjectEditor extends Component {
   state = {
     canSubmit: false,
-    coverImage: ''
+    coverImage: '',
+    localPath: '',
+    newRepo: false
   };
 
   static propTypes = {
@@ -50,10 +53,30 @@ export default class ProjectEditor extends Component {
   }
 
   componentDidMount() {
-    const { props: { project } } = this;
+    const { props: { project, add } } = this;
     this.setState({
       coverImage: project.coverImage || '',
     });
+
+    if(!project.id) {
+      let localPath = folders.askFolderPath();
+      if(localPath) {
+        folders.findProjectInPath(localPath).then(
+          r => {
+            if(r) {
+              add({...r, localPath});
+              hashHistory.push('/project-editor/'+r.id);
+            }
+            console.log('got project', r);
+            this.setState({
+              newRepo: !r,
+              localPath
+            });
+          }, e => console.log('got err', e));
+      } else {
+        alert('Please select a folder to save the project as a GIT project');
+      }
+    }
   }
 
   submit(data, resetForm) {
@@ -61,19 +84,31 @@ export default class ProjectEditor extends Component {
     const {
       form,
       props: { add, save, projects, project },
-      state: { coverImage }
+      state: { coverImage, newRepo }
     } = this;
 
     // let projectPath = askFolderPath();
     // console.log("projectPath received", projectPath);
 
-    const addOrSave = project.id ? save : add;
-    addOrSave({
-      id: project.id || (projects.length + 1).toString(),
+    const localPath = project.id ? project.localPath : this.state.localPath;
+    console.log("setting localPath for existing", localPath, 'newrepo', newRepo);
+
+    const projectObj = {
+      id: project.id || uuid.v1(),
       title,
       article,
       coverImage
-    });
+    };
+    const addOrSave = project.id ? save : add;
+    addOrSave({ ...projectObj, localPath });
+
+    if(newRepo && localPath) {
+      folders.initRepo(localPath, projectObj).then(repo => {
+        console.log("initRepo success", repo);
+      }).catch(err => console.log("initRepo err", err));
+    } else {
+      folders.writeProject(folders.definitionPath(localPath), projectObj).then((pPath) => console.log('successfully written project.json', pPath));
+    }
     resetForm();
     hashHistory.push('/');
   }

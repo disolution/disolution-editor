@@ -1,39 +1,65 @@
-import { remote } from 'electron';
+const { app, remote } = require('electron');
 import fs from 'fs';
-import NodeGit from 'nodegit';
+import NodeGit, { Repository } from 'nodegit';
+import jsonfile from 'jsonfile';
+import path from 'path';
 
 const dialog = remote.dialog;
+const projectDefinition = 'project.json'; // MAIN GIT DOCN PROJECT DEFINITION FILE
 
-console.log("NodeGit", NodeGit);
-
-// var newPath = require("path").resolve("./test-repo/");
-
-function createRepo(path) {
-  // NodeGit.Repository.init(path, 0).then(function(repo) {
-  //   console.log("new repo opened", repo);
-  // }).catch(function(err) {
-  //   console.log("err when creating repo", err);
-  // });
+export function definitionPath(uPath) {
+  return path.join(uPath, projectDefinition);
 }
 
-// NodeGit.Repository.open(newPath).then(function(repo) {
-//   console.log("repo opened", repo);
-// }).catch(function(err) {
-//   console.log("no repo here", err);
-//   createRepo(newPath);
-// });
+export function initRepo(uPath, projectObj = {}) {
+  return Repository.init(uPath, 0).then(function(repo) {
+    const docnPath = definitionPath(uPath);
+    return writeProject(docnPath, projectObj);
+  });
+}
 
-export function isPathValidDocn(path) {
-  if(path) {
+export function writeProject(uPath, projectObj={}) {
+  return new Promise(function(resolve, reject) {
+    jsonfile.writeFile(uPath, projectObj, (err) => {
+      if(err) reject(err);
+      resolve(uPath);
+    });
+  });
+}
 
-  }
-  return false;
+export function openRepo(uPath) {
+  return Repository.open(uPath);
+}
+
+export function findProjectInPath(uPath) {
+  let docnPath = definitionPath(uPath);
+
+  return new Promise(function(resolve, reject) {
+    console.log("looking for project in", docnPath);
+
+    jsonfile.readFile(docnPath, function(err, config) {
+      if(err && err.code == 'ENOENT') return resolve(false);
+      if(err) return reject(err);
+      resolve(config);
+    });
+    // openRepo(uPath).then(function(repo) {
+    //   console.log("repo", repo, repo.state());
+    //
+    //   resolve(repo);
+    // }).catch(function(err) {
+    //   console.log("err", err);
+    //
+    //   reject(err);
+    // });
+  });
 }
 
 export function askFolderPath() {
-  let path = dialog.showOpenDialog({
-    properties: ['openDirectory']
+  let uPath = dialog.showOpenDialog({
+    properties: ['openDirectory', 'createDirectory'],
+    // defaultPath: app.getPath('documents'),
+    title: 'Select folder with an existing DOCN project or for a new one'
   });
-  console.log("askFolderPath", path);
-  return path;
+  console.log("askFolderPath", uPath);
+  return uPath ? uPath[0] : false;
 }

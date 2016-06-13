@@ -46,7 +46,7 @@ export default class ProjectsGrid extends React.Component {
     const projectItems = projects.map((project, i) => (
       <Col key={i} xs={colSize} sm={colSize} md={colSize-2} style={{padding: '.5rem'}}>
         <Link to={`/projects/${project.id}`}>
-          <Card className={styles.card}>
+          <Card className={styles.card} zDepth={1}>
             <CardMedia className={styles.coverImage} style={{ backgroundImage: 'url('+ project.coverImage +')'}}
               overlay={
                 <CardTitle title={project.title} />
