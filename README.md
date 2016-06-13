@@ -3,6 +3,8 @@
 
 ###### [prototype - work in progress]
 
+![](https://raw.githubusercontent.com/disolution/disolution-app/gh-pages/screenshots/screenshot_v0.png)
+
 #### The idea
 All great projects have to start somewhere - but how do you develop your **ideas** and
 find collaborators right now?
