@@ -6,25 +6,47 @@ import path from 'path';
 
 const dialog = remote.dialog;
 const projectDefinition = 'project.json'; // MAIN GIT DOCN PROJECT DEFINITION FILE
+const projectReadme = 'README.md'; // MAIN GIT DOCN PROJECT README FILE
 
 export function definitionPath(uPath) {
   return path.join(uPath, projectDefinition);
+}
+
+export function readmePath(uPath) {
+  return path.join(uPath, projectReadme);
 }
 
 export function initRepo(uPath, projectObj = {}) {
   return Repository.init(uPath, 0).then(function(repo) {
     const docnPath = definitionPath(uPath);
     return writeProject(docnPath, projectObj);
+  }).then(function() {
+    const mdPath = readmePath(uPath);
+    return writeReadme(mdPath, projectObj);
   });
 }
 
-export function writeProject(uPath, projectObj={}) {
+export function writeProject(docnPath, projectObj={}) {
   return new Promise(function(resolve, reject) {
-    jsonfile.writeFile(uPath, projectObj, (err) => {
+    jsonfile.writeFile(docnPath, projectObj, { spaces: 4 }, (err) => {
       if(err) reject(err);
-      resolve(uPath);
+      resolve(docnPath);
     });
   });
+}
+
+export function writeReadme(mdPath, projectObj={}) {
+  const content = buildReadme(projectObj);
+  return new Promise(function(resolve, reject) {
+    fs.writeFile(mdPath, content, (err) => {
+      if(err) reject(err);
+      resolve(mdPath);
+    });
+  });
+}
+
+export function buildReadme(projectObj) {
+  return '# ' + projectObj.title + "\n\n" + projectObj.article;
 }
 
 export function openRepo(uPath) {

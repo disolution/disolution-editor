@@ -6,6 +6,7 @@ body {
   color: black;
   background-color: rgb(217, 217, 217);
   font-family: Arial, Helvetica, Helvetica Neue;
+  font-size: 16px;
 }
 
 .appbar-title {
@@ -16,12 +17,17 @@ body {
   text-align: center;
 }
 
+h1 {
+  font-size: 2.5em;
+}
+
 h2 {
   margin: 0;
-  font-size: 2.25rem;
+  font-size: 2em;
+  line-height: 1.2em;
   font-weight: bold;
   letter-spacing: -.025em;
-  color: #fff;
+  color: rgb(50, 50, 50);
 }
 
 img {
@@ -29,11 +35,8 @@ img {
 }
 
 p {
-  font-size: 24px;
-}
-
-li {
-  list-style: none;
+  font-size: 1em;
+  line-height: 1.5em;
 }
 
 a {

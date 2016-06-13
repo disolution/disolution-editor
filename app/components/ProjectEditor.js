@@ -87,9 +87,6 @@ export default class ProjectEditor extends Component {
       state: { coverImage, newRepo }
     } = this;
 
-    // let projectPath = askFolderPath();
-    // console.log("projectPath received", projectPath);
-
     const localPath = project.id ? project.localPath : this.state.localPath;
     console.log("setting localPath for existing", localPath, 'newrepo', newRepo);
 
@@ -103,11 +100,16 @@ export default class ProjectEditor extends Component {
     addOrSave({ ...projectObj, localPath });
 
     if(newRepo && localPath) {
-      folders.initRepo(localPath, projectObj).then(repo => {
-        console.log("initRepo success", repo);
-      }).catch(err => console.log("initRepo err", err));
+      folders.initRepo(localPath, projectObj).then(() => {
+        console.log("initRepo success");
+      }).catch(err => console.error("initRepo err", err));
     } else {
-      folders.writeProject(folders.definitionPath(localPath), projectObj).then((pPath) => console.log('successfully written project.json', pPath));
+      const docnPath = folders.definitionPath(localPath);
+      const readmePath = folders.readmePath(localPath);
+      folders.writeProject(docnPath, projectObj)
+        .then((docnPath) => console.log('successfully written project.json', docnPath));
+      folders.writeReadme(readmePath, projectObj)
+        .then((mdPath) => console.log('successfully written README.md', mdPath));
     }
     resetForm();
     hashHistory.push('/');
