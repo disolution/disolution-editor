@@ -1,10 +1,15 @@
+import { shell } from 'electron';
+import path from 'path';
+
 import React, { PropTypes } from 'react'
 import { Grid, Row, Col } from 'react-flexbox-grid';
+
 import { Card, CardMedia, CardTitle, CardActions, IconButton } from 'material-ui';
 import { blueA400 } from 'material-ui/styles/colors';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import RemoveIcon from 'material-ui/svg-icons/action/delete';
 import ArrowIcon from 'material-ui/svg-icons/navigation/arrow-upward';
+import FolderIcon from 'material-ui/svg-icons/file/folder-open';
 
 import styles from './ProjectsGrid.css';
 import { Link, hashHistory } from 'react-router';
@@ -24,6 +29,13 @@ export default class ProjectsGrid extends React.Component {
     return e => {
       e.preventDefault();
       hashHistory.push('/project-editor/'+projectId);
+    };
+  }
+
+  openFolder(pPath) {
+    return e => {
+      e.preventDefault();
+      shell.showItemInFolder(path.join(pPath, '/'));
     };
   }
 
@@ -52,6 +64,11 @@ export default class ProjectsGrid extends React.Component {
                 <CardTitle title={project.title} />
               } />
             <CardActions>
+              { project.localPath ?
+                <IconButton onClick={this.openFolder(project.localPath)} tooltip="Open folder">
+                  <FolderIcon />
+                </IconButton>
+              : ''}
               <IconButton onClick={this.editProject(project.id)} tooltip="Edit project">
                 <EditIcon color={blueA400}/>
               </IconButton>
