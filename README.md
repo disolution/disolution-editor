@@ -1,4 +1,4 @@
-# Disolution [ver 0.0]
+# Disolution [ver 0.0.1]
 ### Git based project development and collaboration app for non-techies
 
 ###### [prototype - work in progress]
