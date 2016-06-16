@@ -4,12 +4,13 @@ import { StickyContainer, Sticky } from 'react-sticky';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {AppBar, Badge, IconButton} from 'material-ui';
+import { AppBar, Badge, IconButton } from 'material-ui';
 import AddIcon from 'material-ui/svg-icons/action/note-add';
-import { grey900 } from 'material-ui/styles/colors';
+import SettingsIcon from 'material-ui/svg-icons/action/settings';
+import { green600, red600, yellow100 } from 'material-ui/styles/colors';
 const muiTheme = getMuiTheme({
   palette: {
-    primary1Color: grey900
+    primary1Color: green600
   }
 });
 
@@ -38,7 +39,7 @@ export default class App extends Component {
   render() {
     const appTitle = (
       <span className="appbar-title">
-        <span onClick={() => hashHistory.push('/')}>DISOLUTION <small style={{color:'rgb(252, 105, 255)', fontSize: 10 }}>proto</small></span>
+        <span onClick={() => hashHistory.push('/')}>DISOLUTION <small style={{color: yellow100, fontSize: 10 }}>proto</small></span>
       </span>
     );
 
@@ -52,9 +53,14 @@ export default class App extends Component {
                 title={appTitle}
                 showMenuIconButton={false}
                 iconElementRight={
-                  <IconButton onClick={() => hashHistory.push('/project-editor')}>
-                    <AddIcon />
-                  </IconButton>
+                  <div>
+                    <IconButton onClick={() => hashHistory.push('/project-editor')}>
+                      <AddIcon color="white"/>
+                    </IconButton>
+                    <IconButton onClick={() => hashHistory.push('/settings')}>
+                      <SettingsIcon color="white"/>
+                    </IconButton>
+                  </div>
                 }
               />
             </Sticky>

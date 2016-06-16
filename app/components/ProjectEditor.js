@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { Link, hashHistory } from 'react-router';
 import FormsyMarkdown from './FormsyMarkdown.js';
 import { Form } from 'formsy-react';
@@ -24,25 +24,24 @@ const props = {
   }
 };
 
-export default class ProjectEditor extends Component {
+export default class ProjectEditor extends React.Component {
   state = {
     canSubmit: false,
     coverImage: '',
     localPath: '',
     newRepo: false
-  };
+  }
 
   static propTypes = {
-    projects: PropTypes.array,
     project: PropTypes.object,
     add: PropTypes.func,
     save: PropTypes.func,
-  };
+  }
 
   static defaultProps = {
-    projects: [],
-    project: {}
-  };
+    project: {},
+    settings: {}
+  }
 
   componentWillReceiveProps(nextProps) {
     const { project } = nextProps;
@@ -73,8 +72,6 @@ export default class ProjectEditor extends Component {
               localPath
             });
           }, e => console.log('got err', e));
-      } else {
-        alert('Please select a folder to save the project as a GIT project');
       }
     }
   }
@@ -83,7 +80,7 @@ export default class ProjectEditor extends Component {
     const { title, article } = data;
     const {
       form,
-      props: { add, save, projects, project },
+      props: { add, save, project, settings: { git_author, git_email } },
       state: { coverImage, newRepo }
     } = this;
 
@@ -111,7 +108,7 @@ export default class ProjectEditor extends Component {
       }
       chainStart
         .then(() => openRepo(localPath))
-        .then(repo => commit(repo, 'Project update from Disolution', { name: 'Anon', email: 'anon@blooob.me' }))
+        .then(repo => commit(repo, 'Project update in Disolution', { name: git_author || '', email: git_email || '' }))
         .catch(err => console.error("saving err", err));
     }
 

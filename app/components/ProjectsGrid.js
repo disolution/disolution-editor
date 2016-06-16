@@ -88,13 +88,13 @@ export default class ProjectsGrid extends React.Component {
             <Col key="new_project" xs>
               <p>
                 <ArrowIcon style={{float:'right', width: 30, height: 30}} />
-                {"Seems pretty empty. Start a new project"}
+                <h3>{"Seems pretty empty. Start a new project"}</h3>
               </p>
             </Col>
           : ( projects.length === 1 ?
             <Col key="make_awesome" xs={12}>
               <p>
-                {"Here's your first git project. Make it awesome."}
+                <h3>{"Here's your first git project. Make it awesome."}</h3>
               </p>
             </Col>
           : '' )}

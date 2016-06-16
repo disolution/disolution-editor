@@ -7,9 +7,9 @@ import * as ProjectActions from '../actions/projects';
 
 function mapStateToProps(state, ownProps) {
   const { params } = ownProps;
-  const { projects } = state;
+  const { projects, settings } = state;
   const newProps = {
-    projects
+    settings
   };
   if(params.projectId) {
     newProps.project = projects.find(pr => pr.id === params.projectId);

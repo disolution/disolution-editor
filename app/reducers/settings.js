@@ -8,7 +8,7 @@ export function settings(state = {}, action) {
     case UPDATE_SETTINGS:
       return {
         ...state,
-        newSettings
+        ...newSettings
       };
     default:
       return state;

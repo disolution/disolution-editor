@@ -56,7 +56,8 @@ export function writeReadme(mdPath, projectObj={}) {
 }
 
 export function commit(repo, msg, author, files=[definitionPath(''), readmePath('')]) {
-  let sig = Signature.now(author.name, author.email);
+  const { name, email } = author;
+  let sig = Signature.now(name, email);
   return repo.createCommitOnHead(files, sig, sig, msg);
 }
 
