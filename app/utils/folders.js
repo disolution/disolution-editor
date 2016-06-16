@@ -1,29 +1,39 @@
-const { app, remote } = require('electron');
+import { app, remote } from 'electron';
+const dialog = remote.dialog;
+
 import fs from 'fs';
-import NodeGit, { Repository } from 'nodegit';
+import NodeGit, { Repository, Signature } from 'nodegit';
 import jsonfile from 'jsonfile';
 import path from 'path';
 
-const dialog = remote.dialog;
-const projectDefinition = 'project.json'; // MAIN GIT DOCN PROJECT DEFINITION FILE
-const projectReadme = 'README.md'; // MAIN GIT DOCN PROJECT README FILE
+
+const CONSTANT = {
+  projectDefinition: 'project.json', // MAIN GIT DOCN PROJECT DEFINITION FILE
+  projectReadme: 'README.md'         // MAIN GIT DOCN PROJECT README FILE
+};
 
 export function definitionPath(uPath) {
-  return path.join(uPath, projectDefinition);
-}
+  return path.join(uPath, CONSTANT.projectDefinition);
+};
 
 export function readmePath(uPath) {
-  return path.join(uPath, projectReadme);
+  return path.join(uPath, CONSTANT.projectReadme);
+};
+
+export function initRepo(uPath) {
+  return Repository.init(uPath, 0);
 }
 
-export function initRepo(uPath, projectObj = {}) {
-  return Repository.init(uPath, 0).then(function(repo) {
-    const docnPath = definitionPath(uPath);
-    return writeProject(docnPath, projectObj);
-  }).then(function() {
-    const mdPath = readmePath(uPath);
-    return writeReadme(mdPath, projectObj);
-  });
+export function openRepo(uPath) {
+  return Repository.open(uPath);
+}
+
+export function saveProject(uPath, projectObj={}) {
+  const docnPath = definitionPath(uPath);
+  const mdPath = readmePath(uPath);
+
+  return writeProject(docnPath, projectObj)
+  .then(() => writeReadme(mdPath, projectObj));
 }
 
 export function writeProject(docnPath, projectObj={}) {
@@ -45,12 +55,13 @@ export function writeReadme(mdPath, projectObj={}) {
   });
 }
 
-export function buildReadme(projectObj) {
-  return '# ' + projectObj.title + "\n\n" + projectObj.article;
+export function commit(repo, msg, author, files=[definitionPath(''), readmePath('')]) {
+  let sig = Signature.now(author.name, author.email);
+  return repo.createCommitOnHead(files, sig, sig, msg);
 }
 
-export function openRepo(uPath) {
-  return Repository.open(uPath);
+export function buildReadme(projectObj) {
+  return '# ' + projectObj.title + "\n\n" + projectObj.article;
 }
 
 export function findProjectInPath(uPath) {
