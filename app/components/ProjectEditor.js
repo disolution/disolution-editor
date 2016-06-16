@@ -126,7 +126,7 @@ export default class ProjectEditor extends React.Component {
     const { files } = e.target;
     if(files && files.length) {
       this.setState({
-        coverImage: files[0].path
+        coverImage: encodeURI(files[0].path)
       });
     }
   }

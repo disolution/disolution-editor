@@ -41,7 +41,7 @@ export default class SettingsForm extends React.Component {
     } } } = this;
     return (
       <Paper style={{padding: '1em'}}>
-        <Form onSubmit={this.submit}>
+        <Form onSubmit={this.submit} onChange={this.submit}>
           <h3>Git author public information</h3>
           <Text name="git_author" value={git_author} floatingLabelText="Name" />
           <br/>
@@ -50,38 +50,28 @@ export default class SettingsForm extends React.Component {
           <RadioButtonGroup name="mainColor" defaultSelected={mainColor}>
             <RadioButton
               value={grey900}
-              label="Darkside"
+              label="Dark"
               iconStyle={{fill: grey900}}
-              checkedIcon={<ActionFavorite/>}
-              uncheckedIcon={<ActionFavoriteBorder />}
             />
             <RadioButton
               value={green600}
               label="Green"
               iconStyle={{fill: green600}}
-              checkedIcon={<ActionFavorite/>}
-              uncheckedIcon={<ActionFavoriteBorder />}
             />
             <RadioButton
               value={red600}
               label="Red"
               iconStyle={{fill: red600}}
-              checkedIcon={<ActionFavorite/>}
-              uncheckedIcon={<ActionFavoriteBorder />}
             />
             <RadioButton
               value={purple600}
               label="Purple"
               iconStyle={{fill: purple600}}
-              checkedIcon={<ActionFavorite/>}
-              uncheckedIcon={<ActionFavoriteBorder />}
             />
             <RadioButton
               value={pink600}
               label="Pink"
               iconStyle={{fill: pink600}}
-              checkedIcon={<ActionFavorite/>}
-              uncheckedIcon={<ActionFavoriteBorder />}
             />
           </RadioButtonGroup>
           <br/><br/>

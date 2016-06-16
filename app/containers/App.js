@@ -64,7 +64,6 @@ export default class App extends Component {
         <span onClick={() => hashHistory.push('/')}>DISOLUTION <small style={{color: yellow100, fontSize: 10 }}>proto</small></span>
       </span>
     );
-    console.log('render theme', this.state.selectedTheme);
     return (
       <MuiThemeProvider muiTheme={this.state.selectedTheme}>
         <div>
@@ -76,7 +75,7 @@ export default class App extends Component {
                 showMenuIconButton={false}
                 iconElementRight={
                   <div>
-                    <IconButton onClick={() => hashHistory.push('/project-editor')}>
+                    <IconButton tooltip="Add project" onClick={() => hashHistory.push('/project-editor')}>
                       <AddIcon color="white"/>
                     </IconButton>
                     <IconButton onClick={() => hashHistory.push('/settings')}>
