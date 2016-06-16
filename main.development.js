@@ -14,6 +14,12 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
+const handleRedirect = function(e, url) {
+  if(url != this.getURL()) {
+    e.preventDefault();
+    shell.openExternal(url);
+  }
+}
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
@@ -29,10 +35,14 @@ app.on('ready', () => {
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`);
 
-  mainWindow.webContents.on('did-finish-load', () => {
+  const { webContents } = mainWindow;
+  webContents.on('did-finish-load', () => {
     mainWindow.show();
     mainWindow.focus();
   });
+
+  webContents.on('will-navigate', handleRedirect.bind(webContents));
+  webContents.on('new-window', handleRedirect.bind(webContents));
 
   mainWindow.on('closed', () => {
     mainWindow = null;
