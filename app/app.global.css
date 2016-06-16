@@ -6,7 +6,7 @@ body {
   color: black;
   background-color: rgb(217, 217, 217);
   font-family: Arial, Helvetica, Helvetica Neue;
-  font-size: 16px;
+  font-size: 100%;
 }
 
 .appbar-title {
@@ -34,13 +34,17 @@ img {
   max-width: 100%;
 }
 
-p {
-  font-size: 1em;
-  line-height: 1.5em;
+p, ul > li {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+ul, ol {
+  padding-left: 1.2rem;
 }
 
 a {
-  color: white;
+  color: #E91E63;
   opacity: .75;
   text-decoration: none;
   cursor: pointer;
