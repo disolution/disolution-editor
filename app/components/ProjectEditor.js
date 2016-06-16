@@ -99,18 +99,22 @@ export default class ProjectEditor extends Component {
     const addOrSave = project.id ? save : add;
     addOrSave({ ...projectObj, localPath });
 
-    if(newRepo && localPath) {
-      folders.initRepo(localPath, projectObj).then(() => {
-        console.log("initRepo success");
-      }).catch(err => console.error("initRepo err", err));
-    } else {
-      const docnPath = folders.definitionPath(localPath);
-      const readmePath = folders.readmePath(localPath);
-      folders.writeProject(docnPath, projectObj)
-        .then((docnPath) => console.log('successfully written project.json', docnPath));
-      folders.writeReadme(readmePath, projectObj)
-        .then((mdPath) => console.log('successfully written README.md', mdPath));
+    const { initRepo, openRepo, saveProject, commit, definitionPath, readmePath } = folders;
+    if(localPath) {
+      let chainStart;
+      if(newRepo) {
+        chainStart = initRepo(localPath)
+          .then((repo) => saveProject(localPath, projectObj))
+          .then(() => openRepo(localPath));
+      } else {
+        chainStart = saveProject(localPath, projectObj);
+      }
+      chainStart
+        .then(() => openRepo(localPath))
+        .then(repo => commit(repo, 'Project update from Disolution', { name: 'Anon', email: 'anon@blooob.me' }))
+        .catch(err => console.error("saving err", err));
     }
+
     resetForm();
     hashHistory.push('/');
   }
