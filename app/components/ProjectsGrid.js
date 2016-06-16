@@ -86,16 +86,16 @@ export default class ProjectsGrid extends React.Component {
         <Row center="xs" middle="xs" style={viewHeight}>
           { !projects.length ?
             <Col key="new_project" xs>
-              <p>
+              <div>
                 <ArrowIcon style={{float:'right', width: 30, height: 30}} />
                 <h3>{"Seems pretty empty. Start a new project"}</h3>
-              </p>
+              </div>
             </Col>
           : ( projects.length === 1 ?
             <Col key="make_awesome" xs={12}>
-              <p>
+              <div>
                 <h3>{"Here's your first git project. Make it awesome."}</h3>
-              </p>
+              </div>
             </Col>
           : '' )}
 

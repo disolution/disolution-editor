@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import { Link, hashHistory } from 'react-router';
 import { StickyContainer, Sticky } from 'react-sticky';
 
@@ -8,7 +11,7 @@ import { AppBar, Badge, IconButton } from 'material-ui';
 import AddIcon from 'material-ui/svg-icons/action/note-add';
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import { green600, red600, yellow100 } from 'material-ui/styles/colors';
-const muiTheme = getMuiTheme({
+const defaultTheme = getMuiTheme({
   palette: {
     primary1Color: green600
   }
@@ -36,15 +39,34 @@ export default class App extends Component {
     children: PropTypes.element.isRequired
   };
 
+  state = {
+    selectedTheme: defaultTheme
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.settings) {
+      const { mainColor } = nextProps.settings;
+      if(mainColor) {
+        this.setState({
+          selectedTheme: getMuiTheme({
+            palette: {
+              primary1Color: mainColor
+            }
+          })
+        })
+      }
+    }
+  }
+
   render() {
     const appTitle = (
       <span className="appbar-title">
         <span onClick={() => hashHistory.push('/')}>DISOLUTION <small style={{color: yellow100, fontSize: 10 }}>proto</small></span>
       </span>
     );
-
+    console.log('render theme', this.state.selectedTheme);
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
+      <MuiThemeProvider muiTheme={this.state.selectedTheme}>
         <div>
           <StickyContainer>
             <Sticky>
@@ -82,3 +104,11 @@ export default class App extends Component {
     );
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  return {
+    settings: state.settings
+  };
+}
+
+export const AppContainer = connect(mapStateToProps)(App);
