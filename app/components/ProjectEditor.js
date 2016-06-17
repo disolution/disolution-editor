@@ -125,9 +125,17 @@ export default class ProjectEditor extends React.Component {
   selectImage(e) {
     const { files } = e.target;
     if(files && files.length) {
-      this.setState({
-        coverImage: encodeURI(files[0].path)
-      });
+      const { props: { project } } = this;
+      const localPath = project.id ? project.localPath : this.state.localPath;
+      let coverImage = encodeURI(files[0].path);
+      const projectObj = { coverImage };
+      const imgPath = folders.coverPath(localPath, projectObj);
+      folders.writeCover(coverImage, imgPath).then((p) => {
+        console.log('cover copied to', p);
+        this.setState({
+          coverImage: p
+        });
+      }).catch(e => console.error(e));
     }
   }
 

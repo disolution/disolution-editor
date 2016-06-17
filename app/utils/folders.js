@@ -1,7 +1,7 @@
 import { app, remote } from 'electron';
 const dialog = remote.dialog;
 
-import fs from 'fs';
+import fs from 'fs-extra';
 import NodeGit, { Repository, Signature } from 'nodegit';
 import jsonfile from 'jsonfile';
 import path from 'path';
@@ -9,24 +9,21 @@ import path from 'path';
 
 const CONSTANT = {
   projectDefinition: 'project.json', // MAIN GIT DOCN PROJECT DEFINITION FILE
-  projectReadme: 'README.md'         // MAIN GIT DOCN PROJECT README FILE
+  projectReadme: 'README.md',         // MAIN GIT DOCN PROJECT README FILE
+  projectCover: 'cover-image'         // MAIN GIT DOCN PROJECT COVER IMAGE + FILE EXT
 };
 
-export function definitionPath(uPath) {
-  return path.join(uPath, CONSTANT.projectDefinition);
-};
-
-export function readmePath(uPath) {
-  return path.join(uPath, CONSTANT.projectReadme);
-};
-
-export function initRepo(uPath) {
-  return Repository.init(uPath, 0);
+export const definitionPath = (uPath) => path.join(uPath, CONSTANT.projectDefinition);
+export const readmePath = (uPath) => path.join(uPath, CONSTANT.projectReadme);
+export const coverPath = (uPath, projectObj={}) => {
+  return path.join( uPath,
+    CONSTANT.projectCover
+    + (projectObj.coverImage ? path.extname(projectObj.coverImage) : '')
+  );
 }
 
-export function openRepo(uPath) {
-  return Repository.open(uPath);
-}
+export const initRepo = (uPath) => Repository.init(uPath, 0);
+export const openRepo = (uPath) => Repository.open(uPath);
 
 export function saveProject(uPath, projectObj={}) {
   const docnPath = definitionPath(uPath);
@@ -51,6 +48,15 @@ export function writeReadme(mdPath, projectObj={}) {
     fs.writeFile(mdPath, content, (err) => {
       if(err) reject(err);
       resolve(mdPath);
+    });
+  });
+}
+
+export function writeCover(localPath, coverPath) {
+  return new Promise(function(resolve, reject) {
+    fs.copy(localPath, coverPath, (err) => {
+      if(err) reject(err);
+      resolve(coverPath);
     });
   });
 }
