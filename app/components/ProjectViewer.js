@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { MarkdownPreview } from 'react-marked-markdown';
+import { ProjectActions } from './ProjectsGrid';
 
 import {
   RaisedButton as Button,
@@ -10,13 +11,14 @@ import {
   FloatingActionButton
 } from 'material-ui';
 
-export default class ProjectViewer extends Component {
+export default class ProjectViewer extends React.Component {
   state = {
   };
 
   static propTypes = {
-    projects: React.PropTypes.array,
-    project: React.PropTypes.object
+    projects: PropTypes.array,
+    project: PropTypes.object,
+    remove: PropTypes.func
   };
 
   static defaultProps = {
@@ -25,7 +27,7 @@ export default class ProjectViewer extends Component {
   };
 
   render() {
-    const { props: { project } } = this;
+    const { props: { project, remove } } = this;
     if(!project.id) {
       return (<p>No project found</p>);
     }
@@ -35,6 +37,7 @@ export default class ProjectViewer extends Component {
           <div style={{backgroundImage: 'url('+project.coverImage+')', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center', height: 200}} />
         : '' }
         <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
+          <ProjectActions project={project} remove={remove} />
           <h1>{project.title}</h1>
           <MarkdownPreview value={project.article}/>
         </Paper>

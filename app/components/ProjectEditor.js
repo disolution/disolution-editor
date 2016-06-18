@@ -96,19 +96,19 @@ export default class ProjectEditor extends React.Component {
     const addOrSave = project.id ? save : add;
     addOrSave({ ...projectObj, localPath });
 
-    const { initRepo, openRepo, saveProject, commit, definitionPath, readmePath } = folders;
+    const { initRepo, openRepo, saveProject, commit, definitionPath, readmePath, coverPath } = folders;
     if(localPath) {
       let chainStart;
       if(newRepo) {
         chainStart = initRepo(localPath)
           .then((repo) => saveProject(localPath, projectObj))
-          .then(() => openRepo(localPath));
       } else {
         chainStart = saveProject(localPath, projectObj);
       }
+      const repo_files = [definitionPath(''), readmePath(''), coverPath('', projectObj)];
       chainStart
         .then(() => openRepo(localPath))
-        .then(repo => commit(repo, 'Project update in Disolution', { name: git_author || '', email: git_email || '' }))
+        .then(repo => commit(repo, 'Project update in Disolution', { name: git_author || '', email: git_email || '' }, repo_files))
         .catch(err => console.error("saving err", err));
     }
 
@@ -127,14 +127,22 @@ export default class ProjectEditor extends React.Component {
     if(files && files.length) {
       const { props: { project } } = this;
       const localPath = project.id ? project.localPath : this.state.localPath;
-      let coverImage = encodeURI(files[0].path);
+      let coverImage = files[0].path;
       const projectObj = { coverImage };
       const imgPath = folders.coverPath(localPath, projectObj);
+      const relativePath = folders.coverPath('', projectObj);
       folders.writeCover(coverImage, imgPath).then((p) => {
         console.log('cover copied to', p);
         this.setState({
-          coverImage: p
+          coverImage: imgPath
         });
+        const { props: { project, save } } = this;
+        if(project.id) {
+          save({
+            id: project.id,
+            coverImage: this.state.coverImage
+          });
+        }
       }).catch(e => console.error(e));
     }
   }
@@ -151,7 +159,7 @@ export default class ProjectEditor extends React.Component {
           <input type="file" accept="image/*" onChange={this.selectImage.bind(this)} onDrop={this.selectImage.bind(this)} style={styles.exampleImageInput} />
         </FlatButton>
         { coverImage.length ?
-          <div style={{backgroundImage: 'url('+coverImage+')', ...styles.coverImage}} />
+          <div style={{backgroundImage: 'url('+encodeURI(coverImage)+')', ...styles.coverImage}} />
         : '' }
         <Paper zDepth={1} style={styles.container}>
           <Form

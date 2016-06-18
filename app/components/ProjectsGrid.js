@@ -14,15 +14,10 @@ import FolderIcon from 'material-ui/svg-icons/file/folder-open';
 import styles from './ProjectsGrid.css';
 import { Link, hashHistory } from 'react-router';
 
-export default class ProjectsGrid extends React.Component {
-
+export class ProjectActions extends React.Component {
   static propTypes = {
-    projects: PropTypes.array,
+    project: PropTypes.object,
     remove: PropTypes.func
-  };
-
-  static defaultProps = {
-    projects: []
   };
 
   editProject(projectId) {
@@ -50,6 +45,40 @@ export default class ProjectsGrid extends React.Component {
     };
   }
 
+  render() {
+    const { props: { project } } = this;
+    return (
+      <CardActions>
+        { project.localPath ?
+          <IconButton onClick={this.openFolder(project.localPath)} tooltip="Open folder">
+            <FolderIcon />
+          </IconButton>
+        : ''}
+        <IconButton onClick={this.editProject(project.id)} tooltip="Edit project">
+          <EditIcon color={blueA400}/>
+        </IconButton>
+        <IconButton onClick={this.removeProject(project)} tooltip="Remove project">
+          <RemoveIcon />
+        </IconButton>
+      </CardActions>
+    );
+  }
+
+}
+
+export default class ProjectsGrid extends React.Component {
+
+  static propTypes = {
+    projects: PropTypes.array,
+    remove: PropTypes.func
+  };
+
+  static defaultProps = {
+    projects: []
+  };
+
+
+
   render () {
     const { props: { projects, remove } } = this;
     const viewHeight = { height: 'calc(100vh - 64px)' };
@@ -63,19 +92,7 @@ export default class ProjectsGrid extends React.Component {
               overlay={
                 <CardTitle title={project.title} />
               } />
-            <CardActions>
-              { project.localPath ?
-                <IconButton onClick={this.openFolder(project.localPath)} tooltip="Open folder">
-                  <FolderIcon />
-                </IconButton>
-              : ''}
-              <IconButton onClick={this.editProject(project.id)} tooltip="Edit project">
-                <EditIcon color={blueA400}/>
-              </IconButton>
-              <IconButton onClick={this.removeProject(project)} tooltip="Remove project">
-                <RemoveIcon />
-              </IconButton>
-            </CardActions>
+            <ProjectActions project={project} remove={remove}/>
           </Card>
         </Link>
       </Col>
