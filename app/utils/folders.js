@@ -100,6 +100,5 @@ export function askFolderPath() {
     // defaultPath: app.getPath('documents'),
     title: 'Select folder with an existing DOCN project or for a new one'
   });
-  console.log("askFolderPath", uPath);
   return uPath ? uPath[0] : false;
 }
