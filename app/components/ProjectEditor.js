@@ -1,10 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Link, hashHistory } from 'react-router';
-import FormsyMarkdown from './FormsyMarkdown.js';
+import FormsyMarkdown from './FormsyMarkdown';
+import FormsyInlineText from './FormsyInlineText';
 import { Form } from 'formsy-react';
-import { FormsyText as Text } from 'formsy-material-ui/lib';
 import ImageIcon from 'material-ui/svg-icons/image/add-a-photo';
-
 import styles from './ProjectEditorStyles';
 import * as folders from '../utils/folders';
 import uuid from 'node-uuid';
@@ -167,7 +166,7 @@ export default class ProjectEditor extends React.Component {
             onSubmit={this.submit.bind(this)}
             onValid={this.enableButton.bind(this)}
             onInvalid={this.disableButton.bind(this)}>
-            <Text
+            <FormsyInlineText
               name="title"
               value={project.title || ''}
               style={{...styles.inputs, ...styles.title}}
