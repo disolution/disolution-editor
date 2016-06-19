@@ -10,6 +10,7 @@ import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import RemoveIcon from 'material-ui/svg-icons/action/delete';
 import ArrowIcon from 'material-ui/svg-icons/navigation/arrow-upward';
 import FolderIcon from 'material-ui/svg-icons/file/folder-open';
+import HistoryIcon from 'material-ui/svg-icons/action/history';
 
 import styles from './ProjectsGrid.css';
 import { Link, hashHistory } from 'react-router';
@@ -24,6 +25,13 @@ export class ProjectActions extends React.Component {
     return e => {
       e.preventDefault();
       hashHistory.push('/project-editor/'+projectId);
+    };
+  }
+
+  commitHistory(pPath) {
+    return e => {
+      e.preventDefault();
+      hashHistory.push('/history/'+encodeURIComponent(pPath));
     };
   }
 
@@ -52,6 +60,11 @@ export class ProjectActions extends React.Component {
         { project.localPath ?
           <IconButton onClick={this.openFolder(project.localPath)} tooltip="Open folder">
             <FolderIcon />
+          </IconButton>
+        : ''}
+        { project.localPath ?
+          <IconButton onClick={this.commitHistory(project.localPath)} tooltip="Version history">
+            <HistoryIcon />
           </IconButton>
         : ''}
         <IconButton onClick={this.editProject(project.id)} tooltip="Edit project">
