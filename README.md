@@ -5,6 +5,18 @@
 
 ![](https://raw.githubusercontent.com/disolution/disolution-app/gh-pages/screenshots/screenshot_v0.png)
 
+###### Running the app in development
+1. Clone
+2. Open terminal and run
+```shell
+npm install
+npm run dev
+```
+3. Test & add an issue / PR @ github
+4. ..or just let me know if you would imagine using such a tool
+
+There are no prebuilt executables for now.
+
 #### The idea
 All great projects have to start somewhere - but how do you develop your **ideas** and
 find collaborators right now?
