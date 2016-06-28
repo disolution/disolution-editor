@@ -33,7 +33,7 @@ export default class ProjectViewer extends React.Component {
     }
     return (
       <div>
-        { project.coverImage.length ?
+        { project.coverImage ?
           <div style={{backgroundImage: 'url('+project.coverImage+')', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center', height: 200}} />
         : '' }
         <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>

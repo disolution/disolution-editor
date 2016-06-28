@@ -35,17 +35,17 @@ export default class SettingsForm extends React.Component {
 
   render () {
     const { props: { settings: {
-      git_author,
-      git_email,
+      gitAuthor,
+      gitEmail,
       mainColor
     } } } = this;
     return (
       <Paper style={{padding: '1em'}}>
         <Form onSubmit={this.submit} onChange={this.submit}>
           <h3>Git author public information</h3>
-          <Text name="git_author" value={git_author} floatingLabelText="Name" />
+          <Text name="gitAuthor" value={gitAuthor} floatingLabelText="Name" />
           <br/>
-          <Text name="git_email" value={git_email} floatingLabelText="Email" />
+          <Text name="gitEmail" value={gitEmail} floatingLabelText="Email" />
           <h3>Customize main color</h3>
           <RadioButtonGroup name="mainColor" defaultSelected={mainColor}>
             <RadioButton
