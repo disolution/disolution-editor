@@ -34,8 +34,8 @@ export function projects(state = [], action) {
       return state.map(p => project(p, action));
     case REMOVE_PROJECT:
       return [
-        ...state.slice(0, state.findIndex(p => isEqual(p.id, action.project.id)) ),
-        ...state.slice(1 + state.findIndex(p => isEqual(p.id, action.project.id)) )
+        ...state.slice(0, state.findIndex(p => isEqual(p.id, action.project.id))),
+        ...state.slice(1 + state.findIndex(p => isEqual(p.id, action.project.id)))
       ];
     default:
       return state;

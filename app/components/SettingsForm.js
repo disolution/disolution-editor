@@ -13,7 +13,7 @@ import {
 } from 'material-ui';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
-import { grey900, green600, red600, purple600, pink600 } from 'material-ui/styles/colors';
+import { grey900, indigo800, red800, blue800, brown800 } from 'material-ui/styles/colors';
 
 export default class SettingsForm extends React.Component {
 
@@ -35,17 +35,17 @@ export default class SettingsForm extends React.Component {
 
   render () {
     const { props: { settings: {
-      git_author,
-      git_email,
+      gitAuthor,
+      gitEmail,
       mainColor
     } } } = this;
     return (
       <Paper style={{padding: '1em'}}>
         <Form onSubmit={this.submit} onChange={this.submit}>
           <h3>Git author public information</h3>
-          <Text name="git_author" value={git_author} floatingLabelText="Name" />
+          <Text name="gitAuthor" value={gitAuthor} floatingLabelText="Name" />
           <br/>
-          <Text name="git_email" value={git_email} floatingLabelText="Email" />
+          <Text name="gitEmail" value={gitEmail} floatingLabelText="Email" />
           <h3>Customize main color</h3>
           <RadioButtonGroup name="mainColor" defaultSelected={mainColor}>
             <RadioButton
@@ -54,24 +54,24 @@ export default class SettingsForm extends React.Component {
               iconStyle={{fill: grey900}}
             />
             <RadioButton
-              value={green600}
-              label="Green"
-              iconStyle={{fill: green600}}
+              value={indigo800}
+              label="Indigo"
+              iconStyle={{fill: indigo800}}
             />
             <RadioButton
-              value={red600}
+              value={red800}
               label="Red"
-              iconStyle={{fill: red600}}
+              iconStyle={{fill: red800}}
             />
             <RadioButton
-              value={purple600}
-              label="Purple"
-              iconStyle={{fill: purple600}}
+              value={blue800}
+              label="Blue"
+              iconStyle={{fill: blue800}}
             />
             <RadioButton
-              value={pink600}
-              label="Pink"
-              iconStyle={{fill: pink600}}
+              value={brown800}
+              label="Brown"
+              iconStyle={{fill: brown800}}
             />
           </RadioButtonGroup>
           <br/><br/>
