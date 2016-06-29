@@ -12,9 +12,14 @@ import {
   FloatingActionButton
 } from 'material-ui';
 
+const MarkdownImage = (projectPath, { src, title, alt, nodeKey, ...others }) => {
+  const newSrc = ! /^https?:\/\/.+$/.test(src) ? path.join(projectPath, src) : src;
+  return (
+    <img key={nodeKey} src={newSrc} title={title} alt={alt} {...others} />
+  );
+};
+
 export default class ProjectViewer extends React.Component {
-  state = {
-  };
 
   static propTypes = {
     projects: PropTypes.array,
@@ -42,7 +47,12 @@ export default class ProjectViewer extends React.Component {
         <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
           <ProjectActions project={project} remove={remove} />
           <h1>{project.title}</h1>
-          <ReactMarkdown source={project.article}/>
+          <ReactMarkdown
+            renderers={{
+              Image: MarkdownImage.bind(null, project.localPath)
+            }}
+            source={project.article}
+          />
         </Paper>
       </div>
     );
