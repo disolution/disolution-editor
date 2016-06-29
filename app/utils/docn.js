@@ -54,6 +54,20 @@ export function writeCover(filePath, newPath) {
   });
 }
 
+export function findProjectInPath(uPath) {
+  let docnPath = definitionPath(uPath);
+
+  return new Promise(function(resolve, reject) {
+    console.log("looking for project in", docnPath);
+
+    jsonfile.readFile(docnPath, function(err, config) {
+      if(err && err.code == 'ENOENT') return resolve(false);
+      if(err) return reject(err);
+      resolve(config);
+    });
+  });
+}
+
 // DOCN README.md
 // Human-readable markdown presentation of a DOCN project
 export function buildReadme({ title, coverImage, article }) {
