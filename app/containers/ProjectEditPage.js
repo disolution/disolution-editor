@@ -9,7 +9,8 @@ function mapStateToProps(state, ownProps) {
   const { params } = ownProps;
   const { projects, settings } = state;
   const newProps = {
-    settings
+    settings,
+    projects
   };
   if(params.projectId) {
     newProps.project = projects.find(pr => pr.id === params.projectId);

@@ -1,46 +1,47 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Link, hashHistory } from 'react-router';
+import { hashHistory } from 'react-router';
 import { StickyContainer, Sticky } from 'react-sticky';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { AppBar, Badge, IconButton } from 'material-ui';
+import { AppBar, IconButton, IconMenu, MenuItem } from 'material-ui';
 import AddIcon from 'material-ui/svg-icons/action/note-add';
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
-import { green600, red600, yellow100 } from 'material-ui/styles/colors';
-const defaultTheme = getMuiTheme({
-  palette: {
-    primary1Color: green600
-  }
-});
+import LocalIcon from 'material-ui/svg-icons/file/folder';
+import RemoteIcon from 'material-ui/svg-icons/file/file-download';
+import { dark900 } from 'material-ui/styles/colors';
 
 import Notifications from './Notifications';
 
 export default class App extends Component {
 
+  static propTypes = {
+    children: PropTypes.element.isRequired
+  };
+
   constructor(props) {
     super(props);
 
-    document.addEventListener('dragover',function(e){
+    document.addEventListener('dragover', (e) => {
       e.preventDefault();
       return false;
     }, false);
 
-    document.addEventListener('drop',function(e){
+    document.addEventListener('drop', (e) => {
       e.preventDefault();
       return false;
     }, false);
   }
 
-  static propTypes = {
-    children: PropTypes.element.isRequired
-  };
-
   state = {
-    selectedTheme: defaultTheme
+    selectedTheme: getMuiTheme({
+      palette: {
+        primary1Color: dark900
+      }
+    }),
+    showMenu: false
   };
 
   componentWillReceiveProps(nextProps) {
@@ -53,15 +54,19 @@ export default class App extends Component {
               primary1Color: mainColor
             }
           })
-        })
+        });
       }
     }
   }
 
   render() {
+    const { state: { showMenu } } = this;
     const appTitle = (
       <span className="appbar-title">
-        <span onClick={() => hashHistory.push('/')}>DISOLUTION <small style={{color: yellow100, fontSize: 10 }}>proto</small></span>
+        <span onClick={() => hashHistory.push('/')}>
+          DISOLUTION
+          <small style={{ fontSize: 10 }}>proto</small>
+        </span>
       </span>
     );
     return (
@@ -75,11 +80,36 @@ export default class App extends Component {
                 showMenuIconButton={false}
                 iconElementRight={
                   <div>
-                    <IconButton tooltip="Add project" onClick={() => hashHistory.push('/project-editor')}>
-                      <AddIcon color="white"/>
-                    </IconButton>
+                    <IconMenu
+                      open={showMenu}
+                      iconButtonElement={
+                        <IconButton onClick={() => this.setState({ showMenu: true })}>
+                          <AddIcon color="white" />
+                        </IconButton>
+                      }
+                      targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+                      anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    >
+                      <MenuItem
+                        leftIcon={<LocalIcon />}
+                        primaryText="Add local project"
+                        onClick={() => {
+                          this.setState({ showMenu: false });
+                          hashHistory.push('/project-editor');
+                        }}
+                      />
+                      <MenuItem
+                        leftIcon={<RemoteIcon />}
+                        primaryText="Add remote project"
+                        onClick={() => {
+                          this.setState({ showMenu: false });
+                          window.alert('Git clone not implemented yet');
+                          hashHistory.push('/project-editor');
+                        }}
+                      />
+                    </IconMenu>
                     <IconButton onClick={() => hashHistory.push('/settings')}>
-                      <SettingsIcon color="white"/>
+                      <SettingsIcon color="white" />
                     </IconButton>
                   </div>
                 }
@@ -104,7 +134,7 @@ export default class App extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     settings: state.settings
   };

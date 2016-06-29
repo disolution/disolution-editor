@@ -7,17 +7,50 @@ import ImageIcon from 'material-ui/svg-icons/image/add-a-photo';
 import styles from './ProjectEditorStyles';
 import * as folders from '../utils/folders';
 import uuid from 'node-uuid';
+import path from 'path';
 
 import {
   RaisedButton as Button,
   FlatButton,
-  Paper
+  Paper,
+  Dialog
 } from 'material-ui';
+
+export const ProjectOpenDialog = ({ onSuccess }) => {
+  const actions = [
+    <FlatButton
+      label="Cancel"
+      onClick={() => onSuccess(false)}
+    />
+  ];
+
+  return (
+    <Dialog
+      modal
+      title="Select a folder for the project"
+      actions={actions}
+      open
+    >
+      <p>It's recommended to create an empty folder for a new project.</p>
+      <Button
+        label="Select folder"
+        secondary
+        onClick={() => onSuccess(folders.askFolderPath())}
+      />
+      <p>You can also import an existing project in DOCN format.</p>
+    </Dialog>
+  );
+};
+
+ProjectOpenDialog.propTypes = {
+  onSuccess: PropTypes.func
+};
 
 export default class ProjectEditor extends React.Component {
 
   static propTypes = {
     project: PropTypes.object,
+    projects: PropTypes.array,
     settings: PropTypes.object,
     add: PropTypes.func,
     save: PropTypes.func
@@ -25,43 +58,86 @@ export default class ProjectEditor extends React.Component {
 
   static defaultProps = {
     project: {},
+    projects: [],
     settings: {}
   }
 
   state = {
     canSubmit: false,
     project: this.props.project,
-    newRepo: false
-  }
-
-  componentDidMount() {
-    const { props: { project, add } } = this;
-
-    if(!project.id) {
-      const localPath = folders.askFolderPath();
-      if(localPath) {
-        folders.findProjectInPath(localPath).then(scannedProject => {
-          if(scannedProject) {
-            add({ ...scannedProject, localPath });
-            hashHistory.push(`/project-editor/${scannedProject.id}`);
-          }
-          this.setState({
-            newRepo: !scannedProject,
-            project: {
-              localPath
-            }
-          });
-        });
-      }
-    }
+    newRepo: true,
+    showFolderDialog: !this.props.project.localPath
   }
 
   componentWillReceiveProps(nextProps) {
     const { project } = nextProps;
-    this.setState({ project });
+    this.form.reset();
+    this.setState({ project, showFolderDialog: !project.localPath });
   }
 
-  submit(data, resetForm) {
+  setValidState(isValid = false) {
+    const { state: { canSubmit } } = this;
+    if(canSubmit !== isValid) {
+      this.setState({ canSubmit: isValid });
+    }
+  }
+
+  setLocalPath = (localPath) => {
+    const { props: { projects, add }, state: { project } } = this;
+    console.log("setLocalPath", localPath);
+
+    if(localPath) {
+      folders.findProjectInPath(localPath).then(scannedProject => {
+        if(scannedProject) {
+          if(projects.findIndex(p => p.id === scannedProject.id) == -1) {
+            add({ ...scannedProject, localPath });
+          } else {
+            window.alert('This project has already been added');
+          }
+          hashHistory.push(`/project-editor/${scannedProject.id}`);
+        }
+        this.setState({
+          showFolderDialog: false,
+          newRepo: !scannedProject,
+          project: {
+            ...project,
+            localPath
+          }
+        });
+      });
+    } else {
+      hashHistory.push('/');
+    }
+  }
+
+  setImage = (e) => {
+    const { files } = e.target;
+
+    if(files && files.length) {
+      const { props: { save }, state: { project } } = this;
+      const coverImage = files[0].path;
+      const projectObj = { coverImage };
+      const imgPath = folders.coverPath(project.localPath, projectObj);
+      const relativePath = folders.coverPath('', projectObj);
+
+      this.setState({
+        project: {
+          ...project,
+          coverImage
+        }
+      });
+      folders.writeCover(coverImage, imgPath).then(() => {
+        if(project.id) {
+          save({
+            id: project.id,
+            coverImage: relativePath
+          });
+        }
+      });
+    }
+  }
+
+  submit(data) {
     const { title, article } = data;
     const {
       props: { add, save, settings: { gitAuthor, gitEmail } },
@@ -100,6 +176,7 @@ export default class ProjectEditor extends React.Component {
 
       const repoFiles = [definitionPath(''), readmePath('')];
       if(project.coverImage) {
+        console.log("also add coverImage to repo");
         repoFiles.push(coverPath('', projectObj));
       }
 
@@ -111,43 +188,26 @@ export default class ProjectEditor extends React.Component {
         );
     }
 
-    resetForm();
     hashHistory.push('/');
-  }
-  enableButton() {
-    this.setState({ canSubmit: true });
-  }
-  disableButton() {
-    this.setState({ canSubmit: false });
-  }
-
-  selectImage(e) {
-    const { files } = e.target;
-    if(files && files.length) {
-      const { props: { save }, state: { project } } = this;
-      const coverImage = files[0].path;
-      const projectObj = { coverImage };
-      const imgPath = folders.coverPath(project.localPath, projectObj);
-      // const relativePath = folders.coverPath('', projectObj);
-      folders.writeCover(coverImage, imgPath).then(() => {
-        if(project.id) {
-          save({
-            id: project.id,
-            coverImage: this.state.coverImage
-          });
-        }
-      });
-    }
   }
 
   render() {
     const {
-      state: { project: { title, article, coverImage } }
+      state: {
+        showFolderDialog,
+        project: { id, title, article, coverImage, localPath }
+      }
     } = this;
+
+    const coverImagePath = localPath && coverImage ?
+      encodeURI(path.join(localPath, coverImage) + '?' + new Date().getTime())
+    : '';
 
     return (
       <div style={{ padding: '1em' }}>
-
+        {showFolderDialog ?
+          <ProjectOpenDialog onSuccess={this.setLocalPath} />
+        : ''}
         <FlatButton
           labelPosition="before"
           style={{ paddingTop: 5, minWidth: 40 }}
@@ -156,15 +216,15 @@ export default class ProjectEditor extends React.Component {
           <input
             type="file"
             accept="image/*"
-            onChange={this.selectImage.bind(this)}
-            onDrop={this.selectImage.bind(this)}
+            onChange={this.setImage}
+            onDrop={this.setImage}
             style={styles.exampleImageInput}
           />
         </FlatButton>
         {coverImage ?
           <div
             style={{
-              backgroundImage: `url(${encodeURI(coverImage)})`,
+              backgroundImage: `url(${coverImagePath})`,
               ...styles.coverImage
             }}
           />
@@ -173,8 +233,8 @@ export default class ProjectEditor extends React.Component {
           <Form
             ref={el => { this.form = el; }}
             onSubmit={this.submit.bind(this)}
-            onValid={this.enableButton.bind(this)}
-            onInvalid={this.disableButton.bind(this)}
+            onValid={this.setValidState.bind(this, true)}
+            onInvalid={this.setValidState.bind(this, false)}
           >
             <FormsyInlineText
               name="title"
@@ -202,6 +262,14 @@ export default class ProjectEditor extends React.Component {
             />
           </Form>
         </Paper>
+        {localPath ?
+          <p>
+            Project folder {id ? `(UUID v1: ${id})` : ''}
+            <br />
+            <small>{localPath}</small>
+          </p>
+          : ''
+        }
       </div>
     );
   }
