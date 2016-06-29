@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import { MarkdownPreview } from 'react-marked-markdown';
+import ReactMarkdown from 'react-markdown';
 import { ProjectActions } from './ProjectsGrid';
 import path from 'path';
 
@@ -42,7 +42,7 @@ export default class ProjectViewer extends React.Component {
         <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
           <ProjectActions project={project} remove={remove} />
           <h1>{project.title}</h1>
-          <MarkdownPreview value={project.article}/>
+          <ReactMarkdown source={project.article}/>
         </Paper>
       </div>
     );
