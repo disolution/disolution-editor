@@ -11,9 +11,16 @@ import AddIcon from 'material-ui/svg-icons/action/note-add';
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import LocalIcon from 'material-ui/svg-icons/file/folder';
 import RemoteIcon from 'material-ui/svg-icons/file/file-download';
-import { dark900 } from 'material-ui/styles/colors';
+import { grey900, grey600 } from 'material-ui/styles/colors';
 
 import Notifications from './Notifications';
+
+const defaultTheme = getMuiTheme({
+  palette: {
+    primary1Color: grey900,
+    secondary1Color: grey600,
+  }
+});
 
 export default class App extends Component {
 
@@ -36,11 +43,7 @@ export default class App extends Component {
   }
 
   state = {
-    selectedTheme: getMuiTheme({
-      palette: {
-        primary1Color: dark900
-      }
-    }),
+    selectedTheme: defaultTheme,
     showMenu: false
   };
 
@@ -51,7 +54,8 @@ export default class App extends Component {
         this.setState({
           selectedTheme: getMuiTheme({
             palette: {
-              primary1Color: mainColor
+              primary1Color: mainColor,
+              secondary1Color: grey600,
             }
           })
         });
@@ -60,7 +64,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { state: { showMenu } } = this;
+    const { state: { showMenu, selectedTheme } } = this;
     const appTitle = (
       <span className="appbar-title">
         <span onClick={() => hashHistory.push('/')}>
@@ -69,8 +73,9 @@ export default class App extends Component {
         </span>
       </span>
     );
+
     return (
-      <MuiThemeProvider muiTheme={this.state.selectedTheme}>
+      <MuiThemeProvider muiTheme={selectedTheme}>
         <div>
           <StickyContainer>
             <Sticky>
@@ -82,6 +87,7 @@ export default class App extends Component {
                   <div>
                     <IconMenu
                       open={showMenu}
+                      onRequestChange={(showMenu) => this.setState({ showMenu })}
                       iconButtonElement={
                         <IconButton onClick={() => this.setState({ showMenu: true })}>
                           <AddIcon color="white" />
