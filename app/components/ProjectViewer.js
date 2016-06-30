@@ -95,6 +95,7 @@ export default class ProjectViewer extends React.Component {
           <ProjectActions project={project} remove={remove} />
           <h1>{project.title}</h1>
           <ReactMarkdown
+            escapeHtml
             renderers={{
               Image: MarkdownImage.bind(null, project.localPath),
               List: MarkdownList.bind(null, this.todoCheck)

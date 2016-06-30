@@ -188,7 +188,7 @@ export default class ProjectEditor extends React.Component {
         );
     }
 
-    hashHistory.push('/');
+    hashHistory.push(`/projects/${projectObj.id}`);
   }
 
   render() {

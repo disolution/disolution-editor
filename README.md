@@ -1,11 +1,14 @@
-# Disolution [ver 0.0.1]
-### Git based project development and collaboration app for non-techies
+# Disolution [v0.0.1]
+![](https://travis-ci.org/disolution/disolution-app.svg)
+### Distributed project development collaboration app based on DOCN specification
+Basically like open-source Github **discussion threads (issues)** but stored in a git repository using the flexible **DOCN** spec format (human & machine readable json & markdown). Made for all kinds of projects that need organized discussions.
 
-###### [prototype - work in progress]
 
 ![](https://raw.githubusercontent.com/disolution/disolution-app/gh-pages/screenshots/screenshot_v0.png)
 
-###### Running the app in development
+There are no prebuilt binaries for now. Only tested on Mac OS X.
+
+###### Develop
 1. Clone
 2. Open terminal and run
 ```shell
@@ -13,44 +16,44 @@ npm install
 npm run dev
 ```
 3. Test & add an issue / PR @ github
-4. ..or just let me know if you would imagine using such a tool
+4. ..or just let me know if you would use such a tool
 
 There are no prebuilt executables for now.
 
 #### The idea
-All great projects have to start somewhere - but how do you develop your **ideas** and
-find collaborators right now?
-There have always been different ways, sure.
+All great projects have to start somewhere - this app tries to make it easier for everyone to collaborate offline or online using the most popular distributed version control system - GIT.
 
-But how many people have the chance to learn from this process and maybe even help out?
-Probably not *everyone..*
-
-> *..unless*
-> ### anyone could develop their ideas with tools like GIT and Github for open collaboration.
-
-**Disolution** tends to be similar to [*Gitbook*](https://www.gitbook.com/) - although more simple, open-source and trying to promote the usage amongst anyone.
 From developing personal ideas to easily publishing the projects of the future on
 open collaborative sites like [Guaana.com](https://www.guaana.com).
 
 Feel free to help out with the development and discussions.
 
 ### Stack
-* React, Redux, Material-UI, nodegit, SimpleMDE markdown editor etc - packaged as a simple desktop app using Electron
+* React, Redux, Material-UI, nodegit, Markdown editor etc - packaged as a simple cross-platform desktop app using Electron
 
-#### Authoring projects
-* Easy offline DOCN git formatted project repository editing and online publishing if needed
-* Manages all main project data in a project.json and also automatically generates a beatiful representation of it in README.md
-* Allows to link DOCN project repos to other software repo's - maybe using a .docn/project.json file containing the public repository URL. So you could add your higher-level explanation of a software project into another repository that can be read and understood better by non-technical people, for your own good!
-* A timeline viewer that can be used to quickly get an overview what has changed over time
+#### Current functionality
+* Nice Markdown editor
+* Create a new DOCN project repository ( project.json, README.md + optional cover-image.ext )
+* Possible to import existing DOCN git repos as projects.
+* GIT powers - soon to be integrated into the app ( you can use Github app or SourceTree for now )
 
-#### Collaboration
+#### In the works
+* Creating human and machine readable threads in folders
+* Clone project from a remote GIT URL in the app
+* Manage project remotes
+* Automatic but configurable git push / pull for faster iteration
+
+#### Future of Distributed Collaboration
 * Co-authoring ( managing and linking team members in the repo )
 * Threads - discussion topics
-* Integration with github issues, discourse forums. Pulling the most useful developing comments and ideas from external sources to the main project repo for credits.
-* Possibility for well defined project dependencies (other DOCN projects)
+* Integration with github issues, discourse forums. Pulling the most useful developing comments and ideas from external sources to the main project repo for stored and reliable credit proofs.
+* Possibility for well defined project dependencies and links (other DOCN projects)
 * Linking threads to other threads in other projects
+* Guides on how to setup automatic tests / jobs using CI for special project needs
 
-\* Check the disolution/project-docn repository for a more detailed explanation of the DOCN format and project.
+The possibilities are endless!
+
+\* Check the disolution/project-docn repository for a more detailed explanation of the DOCN spec and overall project.
 
 The MIT License (MIT)
 
