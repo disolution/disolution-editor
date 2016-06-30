@@ -94,7 +94,7 @@ export default class ProjectEditor extends React.Component {
           } else {
             window.alert('This project has already been added');
           }
-          hashHistory.push(`/project-editor/${scannedProject.id}`);
+          hashHistory.push(`/`);
         }
         this.setState({
           showFolderDialog: false,
