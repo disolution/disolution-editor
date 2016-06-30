@@ -1,5 +1,5 @@
 # Disolution [v0.0.1]
-![](https://travis-ci.org/disolution/disolution-app.svg)
+[![](https://travis-ci.org/disolution/disolution-app.svg)](https://travis-ci.org/disolution/disolution-app)
 ### Distributed project development collaboration app based on DOCN specification
 Basically like open-source Github **discussion threads (issues)** but stored in a git repository using the flexible **DOCN** spec format (human & machine readable json & markdown). Made for all kinds of projects that need organized discussions.
 
