@@ -5,50 +5,10 @@ import { ProjectActions } from './ProjectsGrid';
 import path from 'path';
 
 import {
-  RaisedButton as Button,
-  FlatButton,
-  Paper,
-  FontIcon,
-  FloatingActionButton
+  Paper
 } from 'material-ui';
 
-const MarkdownImage = (projectPath, { src, title, alt, nodeKey, ...others }) => {
-  const newSrc = ! /^https?:\/\/.+$/.test(src) ? path.join(projectPath, src) : src;
-  return (
-    <img key={nodeKey} src={newSrc} title={title} alt={alt} {...others} />
-  );
-};
-
-const MarkdownList = (onChange, { start, type, tight, nodeKey, children, ...others }) => {
-  const ListTag = type === 'Bullet' ? 'ul' : 'ol';
-  const TodoItem = ({ done, value }) => (
-    <li style={{ marginLeft: -22, listStyle: 'none' }}>
-      <label>
-        <input
-          name="md-todo[]"
-          onChange={onChange.bind(this, !done, value)}
-          type="checkbox"
-          checked={done}
-        />
-        {value}
-      </label>
-    </li>
-  );
-
-  return (
-    <ListTag>
-      {React.Children.map(children, item => {
-        const value = String(item.props.children);
-        const done = /^\[x\]/.test(value);
-        const todo = /^\[ \]/.test(value);
-
-        return done || todo ?
-          <TodoItem done={done} value={value.slice(3)} />
-        : item;
-      })}
-    </ListTag>
-  );
-};
+import * as renderers from './markdown/Renderers';
 
 export default class ProjectViewer extends React.Component {
 
@@ -84,21 +44,32 @@ export default class ProjectViewer extends React.Component {
     if(!project.id) {
       return (<p>No project found</p>);
     }
+    const imagePath = project.localPath && project.coverImage ?
+      encodeURI(`${path.join(project.localPath, project.coverImage)}?${new Date().getTime()}`)
+    : '';
+    const coverStyle = {
+      backgroundImage: `url(${imagePath})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      height: 200
+    };
+    
     return (
       <div>
-        { project.coverImage ?
-          <div style={{backgroundImage: 'url('+(project.localPath && project.coverImage ?
-            encodeURI(path.join(project.localPath, project.coverImage) + '?' + new Date().getTime())
-          : '')+')', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center', height: 200}} />
-        : '' }
+        {project.coverImage ?
+          <div style={coverStyle} />
+        : ''}
         <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
           <ProjectActions project={project} remove={remove} />
           <h1>{project.title}</h1>
           <ReactMarkdown
             escapeHtml
             renderers={{
-              Image: MarkdownImage.bind(null, project.localPath),
-              List: MarkdownList.bind(null, this.todoCheck)
+              ...renderers,
+              Image: renderers.Image.bind(null, project.localPath),
+              List: renderers.List.bind(null, this.todoCheck),
+              CodeBlock: renderers.CodeBlock
             }}
             source={project.article}
           />
