@@ -19,18 +19,65 @@ const MarkdownImage = (projectPath, { src, title, alt, nodeKey, ...others }) => 
   );
 };
 
+const MarkdownList = (onChange, { start, type, tight, nodeKey, children, ...others }) => {
+  const ListTag = type === 'Bullet' ? 'ul' : 'ol';
+  const TodoItem = ({ done, value }) => (
+    <li style={{ marginLeft: -22, listStyle: 'none' }}>
+      <label>
+        <input
+          name="md-todo[]"
+          onChange={onChange.bind(this, !done, value)}
+          type="checkbox"
+          checked={done}
+        />
+        {value}
+      </label>
+    </li>
+  );
+
+  return (
+    <ListTag>
+      {React.Children.map(children, item => {
+        const value = String(item.props.children);
+        const done = /^\[x\]/.test(value);
+        const todo = /^\[ \]/.test(value);
+
+        return done || todo ?
+          <TodoItem done={done} value={value.slice(3)} />
+        : item;
+      })}
+    </ListTag>
+  );
+};
+
 export default class ProjectViewer extends React.Component {
 
   static propTypes = {
     projects: PropTypes.array,
     project: PropTypes.object,
-    remove: PropTypes.func
+    remove: PropTypes.func,
+    save: PropTypes.func
   };
 
   static defaultProps = {
     projects: [],
     project: {}
   };
+
+  todoCheck = (done, value) => {
+    const { props: { project, save } } = this;
+    const checkMark = [' ', 'x'];
+    const query = `\\[${checkMark[+!done]}\\]\\s+${value.trim()}\\n`;
+
+    const newArticle = project.article.replace(
+      new RegExp(query, 'g'),
+      `[${checkMark[+done]}] ${value.trim()}\n`
+    );
+    save({
+      id: project.id,
+      article: newArticle
+    });
+  }
 
   render() {
     const { props: { project, remove } } = this;
@@ -49,7 +96,8 @@ export default class ProjectViewer extends React.Component {
           <h1>{project.title}</h1>
           <ReactMarkdown
             renderers={{
-              Image: MarkdownImage.bind(null, project.localPath)
+              Image: MarkdownImage.bind(null, project.localPath),
+              List: MarkdownList.bind(null, this.todoCheck)
             }}
             source={project.article}
           />
