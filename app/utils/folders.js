@@ -13,11 +13,13 @@ export function commit(repo, msg, author, files = []) {
 }
 
 export function remotes(repo) {
-  return Remote.list(repo);
+  return Remote.list(repo).then(remoteNames => Promise.all(
+    remoteNames.map(name => Remote.lookup(repo, name).then(r => r.url()))
+  ));
 }
 
 export function getProjectRemotes(projectPath) {
-  return openRepo(projectPath).then((repo) => remotes(repo));
+  return openRepo(projectPath).then(repo => remotes(repo));
 }
 
 export function askFolderPath() {

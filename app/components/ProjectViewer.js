@@ -8,23 +8,28 @@ import {
 } from 'material-ui';
 
 import * as renderers from './markdown/Renderers';
-import * as folders from '../utils/folders.js';
 
 export default class ProjectViewer extends React.Component {
 
   static propTypes = {
     projects: PropTypes.array,
     project: PropTypes.object,
-    remotes: PropTypes.array,
+    getRemotes: PropTypes.func,
     remove: PropTypes.func,
     save: PropTypes.func
   };
 
   static defaultProps = {
     projects: [],
-    project: {},
-    remotes: []
+    project: {}
   };
+
+  componentDidMount() {
+    const { props: { project: { id, localPath }, getRemotes } } = this;
+    if(localPath) {
+      getRemotes({ id, localPath });
+    }
+  }
 
   todoCheck = (done, value) => {
     const { props: { project, save } } = this;
@@ -42,7 +47,7 @@ export default class ProjectViewer extends React.Component {
   }
 
   render() {
-    const { props: { project, remove, remotes } } = this;
+    const { props: { project, remove } } = this;
     if(!project.id) {
       return (<p>No project found</p>);
     }
@@ -75,8 +80,8 @@ export default class ProjectViewer extends React.Component {
             }}
             source={project.article}
           />
-          {remotes.map(r => <p>{r}</p>)}
         </Paper>
+        {project.remotes ? project.remotes.map((url, i) => <p key={i}>{url}</p>) : ''}
       </div>
     );
   }

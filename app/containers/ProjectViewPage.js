@@ -1,5 +1,3 @@
-import React, { Component } from 'react';
-
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ProjectViewer from '../components/ProjectViewer';
@@ -7,9 +5,10 @@ import * as ProjectActions from '../actions/projects';
 
 function mapStateToProps(state, ownProps) {
   const { projects } = state;
+  const project = projects.find(pr => pr.id === ownProps.params.projectId);
   return {
-    projects: projects,
-    project: projects.find(pr => pr.id === ownProps.params.projectId)
+    projects,
+    project
   };
 }
 
