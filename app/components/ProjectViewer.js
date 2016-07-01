@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ProjectActions } from './ProjectsGrid';
+import ProjectActions from './ProjectActions';
 import path from 'path';
 
 import {
@@ -8,25 +8,28 @@ import {
 } from 'material-ui';
 
 import * as renderers from './markdown/Renderers';
+import * as folders from '../utils/folders.js';
 
 export default class ProjectViewer extends React.Component {
 
   static propTypes = {
     projects: PropTypes.array,
     project: PropTypes.object,
+    remotes: PropTypes.array,
     remove: PropTypes.func,
     save: PropTypes.func
   };
 
   static defaultProps = {
     projects: [],
-    project: {}
+    project: {},
+    remotes: []
   };
 
   todoCheck = (done, value) => {
     const { props: { project, save } } = this;
     const checkMark = [' ', 'x'];
-    const query = `\\[${checkMark[+!done]}\\]\\s+${value.trim()}\\n`;
+    const query = `\\[${checkMark[+!done]}\\]\\s+${value.trim()}(?:$|\\n)`;
 
     const newArticle = project.article.replace(
       new RegExp(query, 'g'),
@@ -39,7 +42,7 @@ export default class ProjectViewer extends React.Component {
   }
 
   render() {
-    const { props: { project, remove } } = this;
+    const { props: { project, remove, remotes } } = this;
     if(!project.id) {
       return (<p>No project found</p>);
     }
@@ -72,6 +75,7 @@ export default class ProjectViewer extends React.Component {
             }}
             source={project.article}
           />
+          {remotes.map(r => <p>{r}</p>)}
         </Paper>
       </div>
     );
