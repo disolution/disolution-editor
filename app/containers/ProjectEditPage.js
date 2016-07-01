@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ProjectEditor from '../components/ProjectEditor';
 import * as ProjectActions from '../actions/projects';
+import * as NotificationActions from '../actions/notifications';
 
 function mapStateToProps(state, ownProps) {
   const { params } = ownProps;
@@ -19,7 +20,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(ProjectActions, dispatch);
+  return bindActionCreators({ ...ProjectActions, ...NotificationActions }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectEditor);

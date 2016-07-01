@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { hashHistory } from 'react-router';
+import { RouteTransition } from 'react-router-transition';
 import { StickyContainer, Sticky } from 'react-sticky';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -25,7 +26,8 @@ const defaultTheme = getMuiTheme({
 export default class App extends Component {
 
   static propTypes = {
-    children: PropTypes.element.isRequired
+    children: PropTypes.element.isRequired,
+    location: PropTypes.object
   };
 
   constructor(props) {
@@ -87,7 +89,7 @@ export default class App extends Component {
                   <div>
                     <IconMenu
                       open={showMenu}
-                      onRequestChange={(showMenu) => this.setState({ showMenu })}
+                      onRequestChange={(open) => this.setState({ showMenu: open })}
                       iconButtonElement={
                         <IconButton onClick={() => this.setState({ showMenu: true })}>
                           <AddIcon color="white" />
@@ -109,7 +111,6 @@ export default class App extends Component {
                         primaryText="Add remote project"
                         onClick={() => {
                           this.setState({ showMenu: false });
-                          window.alert('Git clone not implemented yet');
                           hashHistory.push('/project-editor');
                         }}
                       />
@@ -122,9 +123,17 @@ export default class App extends Component {
               />
             </Sticky>
             <Notifications />
-            <div>
+            <RouteTransition
+              pathname={this.props.location.pathname}
+              atEnter={{ opacity: 0.2, translateX: 100 }}
+              atLeave={{ opacity: 0, translateX: -100 }}
+              atActive={{ opacity: 1, translateX: 0 }}
+              mapStyles={styles => ({ position: (styles.opacity === 1) ? undefined: 'absolute',
+      width: (styles.opacity === 1) ? undefined : '100%',
+      height: (styles.opacity === 1) ? undefined : '100%', transform: `translateX(${styles.translateX}%)` })}
+            >
               {this.props.children}
-            </div>
+            </RouteTransition>
           </StickyContainer>
           {
             (() => {

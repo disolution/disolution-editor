@@ -1,20 +1,17 @@
 import React from 'react';
 import path from 'path';
 import { Checkbox } from 'material-ui';
-
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { sunburst } from 'react-syntax-highlighter/dist/styles';
 
-export const CodeBlock = ({ language, literal }) => {
-  return (
-    <SyntaxHighlighter language={language} style={sunburst}>
-      {literal}
-    </SyntaxHighlighter>
-  );
-};
+export const CodeBlock = ({ language, literal }) => (
+  <SyntaxHighlighter language={language} style={sunburst}>
+    {literal}
+  </SyntaxHighlighter>
+);
 
 export const Image = (projectPath, { src, title, alt, nodeKey, ...others }) => {
-  const newSrc = ! /^https?:\/\/.+$/.test(src) ? path.join(projectPath, src) : src;
+  const newSrc = !/^https?:\/\/.+$/.test(src) ? path.join(projectPath, src) : src;
   return (
     <img key={nodeKey} src={newSrc} title={title} alt={alt} {...others} />
   );

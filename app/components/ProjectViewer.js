@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
 import ReactMarkdown from 'react-markdown';
 import { ProjectActions } from './ProjectsGrid';
 import path from 'path';
@@ -54,7 +53,7 @@ export default class ProjectViewer extends React.Component {
       backgroundPosition: 'center',
       height: 200
     };
-    
+
     return (
       <div>
         {project.coverImage ?

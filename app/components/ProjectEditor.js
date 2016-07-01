@@ -83,8 +83,7 @@ export default class ProjectEditor extends React.Component {
   }
 
   setLocalPath = (localPath) => {
-    const { props: { projects, add }, state: { project } } = this;
-    console.log("setLocalPath", localPath);
+    const { props: { projects, add, notify }, state: { project } } = this;
 
     if(localPath) {
       folders.findProjectInPath(localPath).then(scannedProject => {
@@ -92,7 +91,7 @@ export default class ProjectEditor extends React.Component {
           if(projects.findIndex(p => p.id === scannedProject.id) == -1) {
             add({ ...scannedProject, localPath });
           } else {
-            window.alert('This project has already been added');
+            notify('This project has already been added');
           }
           hashHistory.push(`/`);
         }
