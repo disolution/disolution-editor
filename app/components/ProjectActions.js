@@ -1,4 +1,5 @@
 import { shell } from 'electron';
+import path from 'path';
 
 import React, { Component, PropTypes } from 'react';
 import { hashHistory } from 'react-router';
@@ -19,14 +20,14 @@ export default class ProjectActions extends Component {
   editProject(projectId) {
     return e => {
       e.preventDefault();
-      hashHistory.push('/project-editor/'+projectId);
+      hashHistory.push(`/project-editor/${projectId}`);
     };
   }
 
-  commitHistory(pPath) {
+  commitHistory(projectId) {
     return e => {
       e.preventDefault();
-      hashHistory.push('/history/'+encodeURIComponent(pPath));
+      hashHistory.push(`/projects/${projectId}/history`);
     };
   }
 
@@ -52,19 +53,19 @@ export default class ProjectActions extends Component {
     const { props: { project } } = this;
     return (
       <CardActions>
+        <IconButton onClick={this.editProject(project.id)} tooltip="Edit project">
+          <EditIcon color={blueA400} />
+        </IconButton>
         {project.localPath ?
           <IconButton onClick={this.openFolder(project.localPath)} tooltip="Open folder">
             <FolderIcon />
           </IconButton>
         : ''}
         {project.localPath ?
-          <IconButton onClick={this.commitHistory(project.localPath)} tooltip="Version history">
+          <IconButton onClick={this.commitHistory(project.id)} tooltip="Version history">
             <HistoryIcon />
           </IconButton>
         : ''}
-        <IconButton onClick={this.editProject(project.id)} tooltip="Edit project">
-          <EditIcon color={blueA400} />
-        </IconButton>
         <IconButton onClick={this.removeProject(project)} tooltip="Remove project">
           <RemoveIcon />
         </IconButton>

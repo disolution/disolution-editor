@@ -1,5 +1,5 @@
 import path from 'path';
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { Card, CardMedia, CardTitle } from 'material-ui';
@@ -13,7 +13,7 @@ export const ProjectCard = ({ project, remove }) => {
   : '';
 
   return (
-    <Link to={`/projects/${project.id}`}>
+    <Link to={{ pathname: `/projects/${project.id}`, state: { transition: 'slideLeft' } }}>
       <Card className={styles.card} zDepth={1}>
         <CardMedia
           className={styles.coverImage}
@@ -50,8 +50,8 @@ export default class ProjectsGrid extends Component {
     const colSize = projects.length > 1 ? 6 : 9;
 
     const projectItems = projects.map((project, i) => (
-      <Col xs={colSize} sm={colSize} md={colSize - 2} style={{ padding: '.5rem' }}>
-        <ProjectCard key={i} {...{ project, remove }} />
+      <Col key={i} xs={colSize} sm={colSize} md={colSize - 2} style={{ padding: '.5rem' }}>
+        <ProjectCard {...{ project, remove }} />
       </Col>)
     );
 

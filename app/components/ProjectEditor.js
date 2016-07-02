@@ -53,7 +53,8 @@ export default class ProjectEditor extends React.Component {
     projects: PropTypes.array,
     settings: PropTypes.object,
     add: PropTypes.func,
-    save: PropTypes.func
+    save: PropTypes.func,
+    notify: PropTypes.func
   }
 
   static defaultProps = {
@@ -93,7 +94,7 @@ export default class ProjectEditor extends React.Component {
           } else {
             notify('This project has already been added');
           }
-          hashHistory.push(`/`);
+          hashHistory.push('/');
         }
         this.setState({
           showFolderDialog: false,
@@ -139,7 +140,7 @@ export default class ProjectEditor extends React.Component {
   submit(data) {
     const { title, article } = data;
     const {
-      props: { add, save, settings: { gitAuthor, gitEmail } },
+      props: { add, save, notify, settings: { gitAuthor, gitEmail } },
       state: { newRepo, project }
     } = this;
 
@@ -153,7 +154,9 @@ export default class ProjectEditor extends React.Component {
     }
     const addOrSave = project.id ? save : add;
     addOrSave({ ...projectObj, localPath: project.localPath });
-
+    if(project.id) {
+      notify('Project saved');
+    }
     const { initRepo,
       openRepo,
       saveProject,
@@ -175,7 +178,6 @@ export default class ProjectEditor extends React.Component {
 
       const repoFiles = [definitionPath(''), readmePath('')];
       if(project.coverImage) {
-        console.log("also add coverImage to repo");
         repoFiles.push(coverPath('', projectObj));
       }
 
@@ -262,11 +264,11 @@ export default class ProjectEditor extends React.Component {
           </Form>
         </Paper>
         {localPath ?
-          <p>
+          (<p>
             Project folder {id ? `(UUID v1: ${id})` : ''}
             <br />
             <small>{localPath}</small>
-          </p>
+          </p>)
           : ''
         }
       </div>

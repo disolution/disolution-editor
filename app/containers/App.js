@@ -13,6 +13,7 @@ import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import LocalIcon from 'material-ui/svg-icons/file/folder';
 import RemoteIcon from 'material-ui/svg-icons/file/file-download';
 import { grey900, grey600 } from 'material-ui/styles/colors';
+import * as transitions from '../utils/transitions';
 
 import Notifications from './Notifications';
 
@@ -50,8 +51,10 @@ export default class App extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.settings) {
-      const { mainColor } = nextProps.settings;
+    const { settings } = nextProps;
+
+    if(settings) {
+      const { mainColor } = settings;
       if(mainColor) {
         this.setState({
           selectedTheme: getMuiTheme({
@@ -66,7 +69,10 @@ export default class App extends Component {
   }
 
   render() {
-    const { state: { showMenu, selectedTheme } } = this;
+    const {
+      state: { showMenu, selectedTheme },
+      props: { location: { state: locationState } }
+    } = this;
     const appTitle = (
       <span className="appbar-title">
         <span onClick={() => hashHistory.push('/')}>
@@ -123,17 +129,19 @@ export default class App extends Component {
               />
             </Sticky>
             <Notifications />
-            <RouteTransition
-              pathname={this.props.location.pathname}
-              atEnter={{ opacity: 0.2, translateX: 100 }}
-              atLeave={{ opacity: 0, translateX: -100 }}
-              atActive={{ opacity: 1, translateX: 0 }}
-              mapStyles={styles => ({ position: (styles.opacity === 1) ? undefined: 'absolute',
-      width: (styles.opacity === 1) ? undefined : '100%',
-      height: (styles.opacity === 1) ? undefined : '100%', transform: `translateX(${styles.translateX}%)` })}
-            >
-              {this.props.children}
-            </RouteTransition>
+            {locationState && locationState.transition ?
+              (
+                <RouteTransition
+                  pathname={this.props.location.pathname}
+                  {...(this.props.location.action === 'POP' ?
+                    transitions.slideRight
+                  : transitions[locationState.transition])
+                  }
+                >
+                  {this.props.children}
+                </RouteTransition>
+              )
+            : this.props.children}
           </StickyContainer>
           {
             (() => {
