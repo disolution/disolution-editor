@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { hashHistory } from 'react-router';
 import ProjectActions from './ProjectActions';
 import path from 'path';
 import { Grid, Row, Col } from 'react-flexbox-grid';
@@ -10,6 +11,7 @@ import {
 } from 'material-ui';
 
 import CloudIcon from 'material-ui/svg-icons/file/cloud';
+import BackIcon from 'material-ui/svg-icons/navigation/arrow-back';
 import GithubIcon from './icons/github';
 
 import * as renderers from './markdown/Renderers';
@@ -71,24 +73,31 @@ export default class ProjectViewer extends React.Component {
       <Grid fluid>
         <Row>
           <Col xs={9}>
-            <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
-              <h1>{project.title}</h1>
-              {project.coverImage ?
-                <img role="presentation" src={imagePath} />
-              : ''}
-              {children ?
-                React.cloneElement(children, { project })
-              : <ReactMarkdown
-                escapeHtml
-                renderers={{
-                  ...renderers,
-                  Image: renderers.Image.bind(null, project.localPath),
-                  List: renderers.List.bind(null, this.todoCheck),
-                  CodeBlock: renderers.CodeBlock
-                }}
-                source={project.article}
-              />}
-            </Paper>
+            {children ?
+              (<Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
+                <h1 style={{ cursor: 'pointer' }} onClick={() => hashHistory.push(`/projects/${project.id}`)}>
+                  <BackIcon /> {project.title}
+                </h1>
+                {React.cloneElement(children, { project })}
+              </Paper>)
+            : (
+              <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
+                <h1>{project.title}</h1>
+                {project.coverImage ?
+                  <img role="presentation" src={imagePath} />
+                : ''}
+                <ReactMarkdown
+                  escapeHtml
+                  renderers={{
+                    ...renderers,
+                    Image: renderers.Image.bind(null, project.localPath),
+                    List: renderers.List.bind(null, this.todoCheck),
+                    CodeBlock: renderers.CodeBlock
+                  }}
+                  source={project.article}
+                />
+              </Paper>
+            )}
           </Col>
           <Col xs={3}>
             <Sticky top={64}>

@@ -15,6 +15,7 @@ body {
   cursor: pointer;
   font-size: .6em;
   text-align: center;
+  position: relative;
 }
 
 h1 {

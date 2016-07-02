@@ -13,7 +13,7 @@ export const ProjectCard = ({ project, remove }) => {
   : '';
 
   return (
-    <Link to={{ pathname: `/projects/${project.id}`, state: { transition: 'slideLeft' } }}>
+    <Link to={{ pathname: `/projects/${project.id}`, state: { transition: 'pop' } }}>
       <Card className={styles.card} zDepth={1}>
         <CardMedia
           className={styles.coverImage}
