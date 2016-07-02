@@ -29,8 +29,8 @@ app.on('ready', () => {
     height: 728,
     minWidth: 600,
     minHeight: 500,
-    titleBarStyle: 'hidden-inset',
-    frame: false
+    // titleBarStyle: 'hidden-inset',
+    // frame: false
   });
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`);

@@ -14,7 +14,7 @@ import {
 } from 'material-ui';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
-import { grey900, indigo800, red800, blue800, brown800 } from 'material-ui/styles/colors';
+import { grey900, grey600, indigo800, red800, blue800, brown800, white, black } from 'material-ui/styles/colors';
 
 export default class SettingsForm extends React.Component {
 
@@ -63,6 +63,11 @@ export default class SettingsForm extends React.Component {
                     value={grey900}
                     label="Dark"
                     iconStyle={{fill: grey900}}
+                  />
+                  <RadioButton
+                    value={grey600}
+                    label="Lightgray"
+                    iconStyle={{fill: grey600}}
                   />
                   <RadioButton
                     value={indigo800}

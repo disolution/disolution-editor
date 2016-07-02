@@ -7,12 +7,16 @@ import { StickyContainer, Sticky } from 'react-sticky';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import { getLuminance } from 'material-ui/utils/colorManipulator';
 import { AppBar, IconButton, IconMenu, MenuItem } from 'material-ui';
 import AddIcon from 'material-ui/svg-icons/action/note-add';
 import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import LocalIcon from 'material-ui/svg-icons/file/folder';
 import RemoteIcon from 'material-ui/svg-icons/file/file-download';
-import { grey900, grey600 } from 'material-ui/styles/colors';
+import BackIcon from 'material-ui/svg-icons/navigation/arrow-back';
+import { grey900, grey600, grey200, fullWhite, black } from 'material-ui/styles/colors';
 import * as transitions from '../utils/transitions';
 
 import Notifications from './Notifications';
@@ -20,7 +24,10 @@ import Notifications from './Notifications';
 const defaultTheme = getMuiTheme({
   palette: {
     primary1Color: grey900,
-    secondary1Color: grey600,
+    secondary1Color: grey600
+  },
+  appBar: {
+    height: 50
   }
 });
 
@@ -28,7 +35,9 @@ export default class App extends Component {
 
   static propTypes = {
     children: PropTypes.element.isRequired,
-    location: PropTypes.object
+    location: PropTypes.object,
+    route: PropTypes.object,
+    settings: PropTypes.object
   };
 
   constructor(props) {
@@ -57,13 +66,17 @@ export default class App extends Component {
       const { mainColor } = settings;
       if(mainColor) {
         this.setState({
-          selectedTheme: getMuiTheme({
+          selectedTheme: getMuiTheme(
+          defaultTheme, getMuiTheme({
+            appBar: {
+              textColor: getLuminance(mainColor) > 0.6 ? black : fullWhite
+            },
             palette: {
-              primary1Color: mainColor,
-              secondary1Color: grey600,
+              primary1Color: mainColor
             }
-          })
+          }))
         });
+        document.body.style.backgroundColor = mainColor === black ? grey600 : grey200;
       }
     }
   }
@@ -71,16 +84,17 @@ export default class App extends Component {
   render() {
     const {
       state: { showMenu, selectedTheme },
-      props: { location: { state: locationState } }
+      props: { location: { state: locationState, pathname: currentPath },
+        settings: { mainColor }
+      }
     } = this;
     const appTitle = (
       <span className="appbar-title">
-        <span onClick={() => hashHistory.push('/')}>
-          DISOLUTION
-          <small style={{ fontSize: 10 }}>proto</small>
-        </span>
       </span>
     );
+
+    const headerIconColor = getLuminance(selectedTheme.palette.primary1Color) > 0.6 ? black : fullWhite;
+    console.log("headerIconColor", selectedTheme);
 
     return (
       <MuiThemeProvider muiTheme={selectedTheme}>
@@ -88,9 +102,16 @@ export default class App extends Component {
           <StickyContainer>
             <Sticky>
               <AppBar
-                style={{ WebkitAppRegion: 'drag' }}
+                style={{ WebkitAppRegion: 'drag', WebkitUserSelect: 'none' }}
                 title={appTitle}
-                showMenuIconButton={false}
+                showMenuIconButton={(currentPath.trim() !== '/')}
+                iconElementLeft={currentPath.trim() !== '/' ? (
+                  <IconButton onClick={() => hashHistory.push('/')}>
+                    <BackIcon color={headerIconColor} />
+                  </IconButton>
+                )
+                : false
+                }
                 iconElementRight={
                   <div>
                     <IconMenu
@@ -98,7 +119,7 @@ export default class App extends Component {
                       onRequestChange={(open) => this.setState({ showMenu: open })}
                       iconButtonElement={
                         <IconButton onClick={() => this.setState({ showMenu: true })}>
-                          <AddIcon color="white" />
+                          <AddIcon color={headerIconColor} />
                         </IconButton>
                       }
                       targetOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -122,7 +143,7 @@ export default class App extends Component {
                       />
                     </IconMenu>
                     <IconButton onClick={() => hashHistory.push('/settings')}>
-                      <SettingsIcon color="white" />
+                      <SettingsIcon color={headerIconColor} />
                     </IconButton>
                   </div>
                 }
@@ -130,17 +151,17 @@ export default class App extends Component {
             </Sticky>
             <Notifications />
             {locationState && locationState.transition ?
-              (
-                <RouteTransition
-                  pathname={this.props.location.pathname}
-                  {...(this.props.location.action === 'POP' ?
-                    transitions.slideRight
-                  : transitions[locationState.transition])
-                  }
-                >
-                  {this.props.children}
-                </RouteTransition>
-              )
+            (
+              <RouteTransition
+                pathname={this.props.location.pathname}
+                {...(this.props.location.action === 'POP' ?
+                  transitions.slideRight
+                : transitions[locationState.transition])
+                }
+              >
+                {this.props.children}
+              </RouteTransition>
+            )
             : this.props.children}
           </StickyContainer>
           {
