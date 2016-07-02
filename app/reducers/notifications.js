@@ -7,9 +7,7 @@ export function notifyActions(state = '', action) {
     case ADD_MESSAGE:
       return String(action.msg);
     case ADD_PROJECT:
-      return 'Project saved';
-    case SAVE_PROJECT:
-      return 'Project updated';
+      return 'Project added';
     case UPDATE_SETTINGS:
       return 'Settings saved';
     case CLEAR_MESSAGE:

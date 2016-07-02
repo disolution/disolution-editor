@@ -2,16 +2,27 @@ import React, { PropTypes } from 'react';
 import ReactMarkdown from 'react-markdown';
 import ProjectActions from './ProjectActions';
 import path from 'path';
+import { Grid, Row, Col } from 'react-flexbox-grid';
+import Sticky from 'react-stickynode';
 
 import {
-  Paper
+  Paper, List, ListItem, Subheader
 } from 'material-ui';
 
+import CloudIcon from 'material-ui/svg-icons/file/cloud';
+import GithubIcon from './icons/github';
+
 import * as renderers from './markdown/Renderers';
+
+function getDomain(str) {
+  const matches = str.match(/^https?:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
+  return matches && matches[1] ? matches[1] : false;
+}
 
 export default class ProjectViewer extends React.Component {
 
   static propTypes = {
+    children: PropTypes.node,
     projects: PropTypes.array,
     project: PropTypes.object,
     getRemotes: PropTypes.func,
@@ -26,6 +37,7 @@ export default class ProjectViewer extends React.Component {
 
   componentDidMount() {
     const { props: { project: { id, localPath }, getRemotes } } = this;
+
     if(localPath) {
       getRemotes({ id, localPath });
     }
@@ -47,42 +59,64 @@ export default class ProjectViewer extends React.Component {
   }
 
   render() {
-    const { props: { project, remove } } = this;
+    const { props: { children, project, remove } } = this;
     if(!project.id) {
       return (<p>No project found</p>);
     }
     const imagePath = project.localPath && project.coverImage ?
       encodeURI(`${path.join(project.localPath, project.coverImage)}?${new Date().getTime()}`)
     : '';
-    const coverStyle = {
-      backgroundImage: `url(${imagePath})`,
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      height: 200
-    };
 
     return (
-      <div>
-        {project.coverImage ?
-          <div style={coverStyle} />
-        : ''}
-        <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
-          <ProjectActions project={project} remove={remove} />
-          <h1>{project.title}</h1>
-          <ReactMarkdown
-            escapeHtml
-            renderers={{
-              ...renderers,
-              Image: renderers.Image.bind(null, project.localPath),
-              List: renderers.List.bind(null, this.todoCheck),
-              CodeBlock: renderers.CodeBlock
-            }}
-            source={project.article}
-          />
-        </Paper>
-        {project.remotes ? project.remotes.map((url, i) => <p key={i}>{url}</p>) : ''}
-      </div>
+      <Grid fluid>
+        <Row>
+          <Col xs={9}>
+            <Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
+              <h1>{project.title}</h1>
+              {project.coverImage ?
+                <img role="presentation" src={imagePath} />
+              : ''}
+              {children ?
+                React.cloneElement(children, { project })
+              : <ReactMarkdown
+                escapeHtml
+                renderers={{
+                  ...renderers,
+                  Image: renderers.Image.bind(null, project.localPath),
+                  List: renderers.List.bind(null, this.todoCheck),
+                  CodeBlock: renderers.CodeBlock
+                }}
+                source={project.article}
+              />}
+            </Paper>
+          </Col>
+          <Col xs={3}>
+            <Sticky top={64}>
+              <ProjectActions {...{ project, remove }} />
+              {project.remotes && project.remotes.length ? (
+                <List>
+                  <Subheader>Published at</Subheader>
+                  {project.remotes.map((remote, i) =>
+                    <ListItem
+                      style={{ fontSize: '.8em' }}
+                      key={i}
+                      leftIcon={(
+                        getDomain(remote.url) === 'github.com' ?
+                          <GithubIcon />
+                        : <CloudIcon />
+                      )}
+                      primaryText={getDomain(remote.url) === 'github.com' ? 'Github.com' : `${remote.name}`}
+                      href={remote.url}
+                      tooltip={remote.url}
+                    />
+                  )}
+                </List>
+              )
+              : ''}
+            </Sticky>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

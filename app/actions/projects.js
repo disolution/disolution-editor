@@ -27,34 +27,13 @@ export function remove(project) {
 
 export function getRemotes({ id, localPath }) {
   return dispatch => {
-
     if(localPath) {
       folders.getProjectRemotes(localPath)
       .then(remotes => dispatch(save({
         id, remotes
       })));
     } else {
-      return Promise.resolve();
+      return Promise.reject(new Error('Project missing a local path to scan for git remotes'));
     }
   };
 }
-
-// export function incrementIfOdd() {
-//   return (dispatch, getState) => {
-//     const { projects } = getState();
-//
-//     if (projects % 2 === 0) {
-//       return;
-//     }
-//
-//     dispatch(increment());
-//   };
-// }
-//
-// export function incrementAsync(delay = 1000) {
-//   return dispatch => {
-//     setTimeout(() => {
-//       dispatch(increment());
-//     }, delay);
-//   };
-// }
