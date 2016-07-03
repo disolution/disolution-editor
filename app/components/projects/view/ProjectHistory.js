@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 // import { Link } from 'react-router';
 
-import * as folders from '../utils/folders';
+import * as folders from '../../../utils/folders';
 import moment from 'moment';
 import { Avatar, List, ListItem } from 'material-ui';
 import gravatar from 'gravatar';

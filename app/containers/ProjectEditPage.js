@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import ProjectEditor from '../components/ProjectEditor';
+import ProjectEditor from '../components/projects/edit/ProjectEditor';
 import * as ProjectActions from '../actions/projects';
 import * as NotificationActions from '../actions/notifications';
 

@@ -3,12 +3,13 @@ import ReactMarkdown from 'react-markdown';
 import { IndexLink, hashHistory } from 'react-router';
 import ProjectActions from './ProjectActions';
 import ProjectRemotes from './ProjectRemotes';
+import ProjectStatus from './ProjectStatus';
 import path from 'path';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Sticky from 'react-stickynode';
 
 import {
-  Paper, List, ListItem, Subheader, Menu, MenuItem
+  Paper, Menu, MenuItem
 } from 'material-ui';
 
 import { grey300 } from 'material-ui/styles/colors';
@@ -18,8 +19,8 @@ import HistoryIcon from 'material-ui/svg-icons/action/history';
 import BackIcon from 'material-ui/svg-icons/navigation/arrow-back';
 import ProjectIcon from 'material-ui/svg-icons/action/toc';
 
-import * as renderers from './markdown/Renderers';
-import * as folders from '../utils/folders';
+import * as renderers from '../../markdown/Renderers';
+import * as folders from '../../../utils/folders';
 
 export default class ProjectViewer extends React.Component {
 
@@ -50,6 +51,7 @@ export default class ProjectViewer extends React.Component {
           notify('Have you moved or deleted the project folder? Please import it again.');
         }
       });
+      folders.getProjectStatus(localPath).then(files => save({ id, files }));
     }
   }
 
@@ -130,7 +132,9 @@ export default class ProjectViewer extends React.Component {
                   </IndexLink>
                 </Menu>
               </Paper>
-
+              {project.files && project.files.length ?
+                <ProjectStatus files={project.files} />
+              : ''}
               {project.remotes && project.remotes.length ?
                 <ProjectRemotes remotes={project.remotes} />
               : ''}

@@ -8,7 +8,7 @@ import ProjectEditPage from './containers/ProjectEditPage';
 import ProjectsListPage from './containers/ProjectsListPage';
 import ProjectViewPage from './containers/ProjectViewPage';
 
-import ProjectHistory from './components/ProjectHistory';
+import ProjectHistory from './components/projects/view/ProjectHistory';
 
 export default (
   <Route path="/" component={AppContainer}>

@@ -5,7 +5,7 @@ import FormsyInlineText from './FormsyInlineText';
 import { Form } from 'formsy-react';
 import ImageIcon from 'material-ui/svg-icons/image/add-a-photo';
 import styles from './ProjectEditorStyles';
-import * as folders from '../utils/folders';
+import * as folders from '../../../utils/folders';
 import uuid from 'node-uuid';
 import path from 'path';
 

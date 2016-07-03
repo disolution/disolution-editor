@@ -35,6 +35,26 @@ export function listenCommits(projectPath, commitCb) {
   });
 }
 
+export function getProjectStatus(projectPath) {
+  return openRepo(projectPath).then(repo => getRepoStatus(repo));
+}
+
+export function getRepoStatus(repo) {
+  return repo.getStatus().then((files) => {
+    function extractStatus(file) {
+      const statuses = [];
+      if (file.isNew()) { statuses.push('NEW'); }
+      if (file.isModified()) { statuses.push('MODIFIED'); }
+      if (file.isTypechange()) { statuses.push('TYPECHANGE'); }
+      if (file.isRenamed()) { statuses.push('RENAMED'); }
+      if (file.isIgnored()) { statuses.push('IGNORED'); }
+      return statuses;
+    }
+
+    return files.map((file) => ({ path: file.path(), statuses: extractStatus(file) }));
+  });
+}
+
 export function askFolderPath() {
   const uPath = dialog.showOpenDialog({
     properties: ['openDirectory', 'createDirectory'],

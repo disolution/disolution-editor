@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Subheader, List, ListItem } from 'material-ui';
-import GithubIcon from './icons/github';
+import GithubIcon from '../../icons/github';
 import CloudIcon from 'material-ui/svg-icons/file/cloud';
 
 function getDomain(str) {
