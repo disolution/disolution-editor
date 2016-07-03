@@ -13,8 +13,8 @@ export default {
     paddingBottom: 10
   },
   titleHint: {
-    fontSize:'.8em',
-    bottom:20
+    fontSize: '.8em',
+    bottom: 20
   },
   coverImage: {
     backgroundRepeat: 'no-repeat',

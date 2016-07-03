@@ -105,7 +105,7 @@ export default class App extends Component {
                 title={appTitle}
                 showMenuIconButton={(currentPath.trim() !== '/')}
                 iconElementLeft={currentPath.trim() !== '/' ?
-                    (<IconButton onClick={() => hashHistory.push('/')}>
+                    (<IconButton onClick={() => hashHistory.push({ path: '/', state: { transition: 'slideLeft' } })}>
                       <BackIcon color={headerIconColor} />
                     </IconButton>)
                   : undefined

@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import ProjectViewer from '../components/ProjectViewer';
+import ProjectViewer from '../components/projects/view/ProjectViewer';
 import * as ProjectActions from '../actions/projects';
 import * as NotificationActions from '../actions/notifications';
 

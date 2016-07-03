@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import ProjectsGrid from '../components/ProjectsGrid';
+import ProjectsGrid from '../components/projects/list/ProjectsGrid';
 import * as ProjectActions from '../actions/projects';
 
 function mapStateToProps(state) {

@@ -5,7 +5,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import { Card, CardMedia, CardTitle } from 'material-ui';
 import ArrowIcon from 'material-ui/svg-icons/navigation/arrow-upward';
 import styles from './ProjectsGrid.css';
-import ProjectActions from './ProjectActions';
+import ProjectActions from '../view/ProjectActions';
 
 export const ProjectCard = ({ project, remove }) => {
   const imagePath = project.localPath && project.coverImage ?
