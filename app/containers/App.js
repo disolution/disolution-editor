@@ -67,14 +67,16 @@ export default class App extends Component {
       if(mainColor) {
         this.setState({
           selectedTheme: getMuiTheme(
-          defaultTheme, getMuiTheme({
-            appBar: {
-              textColor: getLuminance(mainColor) > 0.6 ? black : fullWhite
-            },
-            palette: {
-              primary1Color: mainColor
+            {
+              ...defaultTheme,
+              appBar: {
+                textColor: getLuminance(mainColor) > 0.6 ? black : fullWhite
+              },
+              palette: {
+                primary1Color: mainColor
+              }
             }
-          }))
+          )
         });
         document.body.style.backgroundColor = mainColor === black ? grey600 : grey200;
       }
@@ -84,9 +86,7 @@ export default class App extends Component {
   render() {
     const {
       state: { showMenu, selectedTheme },
-      props: { location: { state: locationState, pathname: currentPath },
-        settings: { mainColor }
-      }
+      props: { location: { state: locationState, pathname: currentPath } }
     } = this;
     const appTitle = (
       <span className="appbar-title">
@@ -94,7 +94,6 @@ export default class App extends Component {
     );
 
     const headerIconColor = getLuminance(selectedTheme.palette.primary1Color) > 0.6 ? black : fullWhite;
-    console.log("headerIconColor", selectedTheme);
 
     return (
       <MuiThemeProvider muiTheme={selectedTheme}>
@@ -105,12 +104,11 @@ export default class App extends Component {
                 style={{ WebkitAppRegion: 'drag', WebkitUserSelect: 'none' }}
                 title={appTitle}
                 showMenuIconButton={(currentPath.trim() !== '/')}
-                iconElementLeft={currentPath.trim() !== '/' ? (
-                  <IconButton onClick={() => hashHistory.push('/')}>
-                    <BackIcon color={headerIconColor} />
-                  </IconButton>
-                )
-                : false
+                iconElementLeft={currentPath.trim() !== '/' ?
+                    (<IconButton onClick={() => hashHistory.push('/')}>
+                      <BackIcon color={headerIconColor} />
+                    </IconButton>)
+                  : undefined
                 }
                 iconElementRight={
                   <div>

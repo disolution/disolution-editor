@@ -4,17 +4,16 @@
  */
 import fs from 'fs-extra';
 import path from 'path';
-import jsonfile from 'jsonfile';
 
-export const docnJSON = 'project.json';  // MAIN GIT DOCN PROJECT DEFINITION FILE
-export const docnReadme = 'README.md';         // MAIN GIT DOCN PROJECT README FILE
-export const docnImage = 'cover-image';        // MAIN GIT DOCN PROJECT COVER IMAGE + FILE EXT
+export const DOCN_JSON = 'project.json';  // MAIN GIT DOCN PROJECT DEFINITION FILE
+export const DOCN_README = 'README.md';         // MAIN GIT DOCN PROJECT README FILE
+export const DOCN_IMAGE = 'cover-image';        // MAIN GIT DOCN PROJECT COVER IMAGE + FILE EXT
 
-export const definitionPath = (uPath) => path.join(uPath, docnJSON);
-export const readmePath = (uPath) => path.join(uPath, docnReadme);
+export const definitionPath = (uPath) => path.join(uPath, DOCN_JSON);
+export const readmePath = (uPath) => path.join(uPath, DOCN_README);
 export const coverPath = (uPath, project = {}) =>
   path.join(uPath,
-    docnImage +
+    DOCN_IMAGE +
     (project.coverImage ? path.extname(project.coverImage) : '')
   );
 
@@ -28,7 +27,7 @@ export function saveProject(uPath, project = {}) {
 
 export function writeProject(docnPath, project = {}) {
   return new Promise((resolve, reject) => {
-    jsonfile.writeFile(docnPath, project, { spaces: 4 }, (err) => {
+    fs.outputJson(docnPath, project, { spaces: 4 }, (err) => {
       if(err) reject(err);
       resolve(docnPath);
     });
@@ -54,14 +53,12 @@ export function writeCover(filePath, newPath) {
   });
 }
 
-export function findProjectInPath(uPath) {
-  let docnPath = definitionPath(uPath);
+export function findProjectInPath(projectPath) {
+  const docnPath = definitionPath(projectPath);
 
-  return new Promise(function(resolve, reject) {
-    console.log("looking for project in", docnPath);
-
-    jsonfile.readFile(docnPath, function(err, config) {
-      if(err && err.code == 'ENOENT') return resolve(false);
+  return new Promise((resolve, reject) => {
+    fs.readJson(docnPath, (err, config) => {
+      if(err && err.code === 'ENOENT') return resolve(false);
       if(err) return reject(err);
       resolve(config);
     });
