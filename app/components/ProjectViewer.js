@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { IndexLink, hashHistory } from 'react-router';
 import ProjectActions from './ProjectActions';
+import ProjectRemotes from './ProjectRemotes';
 import path from 'path';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Sticky from 'react-stickynode';
@@ -14,18 +15,11 @@ import { grey300 } from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator';
 
 import HistoryIcon from 'material-ui/svg-icons/action/history';
-import CloudIcon from 'material-ui/svg-icons/file/cloud';
 import BackIcon from 'material-ui/svg-icons/navigation/arrow-back';
 import ProjectIcon from 'material-ui/svg-icons/action/toc';
-import GithubIcon from './icons/github';
 
 import * as renderers from './markdown/Renderers';
 import * as folders from '../utils/folders';
-
-function getDomain(str) {
-  const matches = str.match(/^https?:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
-  return matches && matches[1] ? matches[1] : false;
-}
 
 export default class ProjectViewer extends React.Component {
 
@@ -137,25 +131,8 @@ export default class ProjectViewer extends React.Component {
                 </Menu>
               </Paper>
 
-              {project.remotes && project.remotes.length ? (
-                <List>
-                  <Subheader>Published at</Subheader>
-                  {project.remotes.map((remote, i) =>
-                    <ListItem
-                      style={{ fontSize: '.8em' }}
-                      key={i}
-                      leftIcon={(
-                        getDomain(remote.url) === 'github.com' ?
-                          <GithubIcon />
-                        : <CloudIcon />
-                      )}
-                      primaryText={getDomain(remote.url) === 'github.com' ? 'Github.com' : `${remote.name}`}
-                      href={remote.url}
-                      tooltip={remote.url}
-                    />
-                  )}
-                </List>
-              )
+              {project.remotes && project.remotes.length ?
+                <ProjectRemotes remotes={project.remotes} />
               : ''}
             </Sticky>
           </Col>
