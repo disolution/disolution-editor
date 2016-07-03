@@ -1,17 +1,22 @@
 import React, { PropTypes } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { hashHistory } from 'react-router';
+import { IndexLink, hashHistory } from 'react-router';
 import ProjectActions from './ProjectActions';
 import path from 'path';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Sticky from 'react-stickynode';
 
 import {
-  Paper, List, ListItem, Subheader
+  Paper, List, ListItem, Subheader, Menu, MenuItem
 } from 'material-ui';
 
+import { grey300 } from 'material-ui/styles/colors';
+import { fade } from 'material-ui/utils/colorManipulator';
+
+import HistoryIcon from 'material-ui/svg-icons/action/history';
 import CloudIcon from 'material-ui/svg-icons/file/cloud';
 import BackIcon from 'material-ui/svg-icons/navigation/arrow-back';
+import ProjectIcon from 'material-ui/svg-icons/action/toc';
 import GithubIcon from './icons/github';
 
 import * as renderers from './markdown/Renderers';
@@ -62,6 +67,7 @@ export default class ProjectViewer extends React.Component {
 
   render() {
     const { props: { children, project, remove } } = this;
+
     if(!project.id) {
       return (<p>No project found</p>);
     }
@@ -75,7 +81,10 @@ export default class ProjectViewer extends React.Component {
           <Col xs={9}>
             {children ?
               (<Paper zDepth={1} style={{ padding: '1em', paddingTop: '.5em' }}>
-                <h1 style={{ cursor: 'pointer' }} onClick={() => hashHistory.push(`/projects/${project.id}`)}>
+                <h1
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => hashHistory.push(`/projects/${project.id}`)}
+                >
                   <BackIcon /> {project.title}
                 </h1>
                 {React.cloneElement(children, { project })}
@@ -102,6 +111,23 @@ export default class ProjectViewer extends React.Component {
           <Col xs={3}>
             <Sticky top={64}>
               <ProjectActions {...{ project, remove }} />
+              <Paper style={{ display: 'inline-block' }}>
+                <Menu>
+                  <IndexLink
+                    to={`/projects/${project.id}`}
+                    activeStyle={{ display: 'block', backgroundColor: fade(grey300, 0.5) }}
+                  >
+                    <MenuItem leftIcon={<ProjectIcon />} primaryText="Description" />
+                  </IndexLink>
+                  <IndexLink
+                    to={`/projects/${project.id}/history`}
+                    activeStyle={{ display: 'block', backgroundColor: fade(grey300, 0.5) }}
+                  >
+                    <MenuItem leftIcon={<HistoryIcon />} primaryText="History" />
+                  </IndexLink>
+                </Menu>
+              </Paper>
+
               {project.remotes && project.remotes.length ? (
                 <List>
                   <Subheader>Published at</Subheader>
