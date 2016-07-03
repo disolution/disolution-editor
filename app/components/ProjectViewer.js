@@ -20,6 +20,7 @@ import ProjectIcon from 'material-ui/svg-icons/action/toc';
 import GithubIcon from './icons/github';
 
 import * as renderers from './markdown/Renderers';
+import * as folders from '../utils/folders';
 
 function getDomain(str) {
   const matches = str.match(/^https?:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
@@ -33,6 +34,7 @@ export default class ProjectViewer extends React.Component {
     projects: PropTypes.array,
     project: PropTypes.object,
     getRemotes: PropTypes.func,
+    notify: PropTypes.func,
     remove: PropTypes.func,
     save: PropTypes.func
   };
@@ -43,10 +45,17 @@ export default class ProjectViewer extends React.Component {
   };
 
   componentDidMount() {
-    const { props: { project: { id, localPath }, getRemotes } } = this;
+    const { props: { project: { id, localPath }, getRemotes, notify, save } } = this;
 
     if(localPath) {
       getRemotes({ id, localPath });
+      folders.findProjectInPath(localPath).then(scannedProject => {
+        if(scannedProject) {
+          save({ ...scannedProject, localPath });
+        } else {
+          notify('Have you moved or deleted the project folder? Please import it again.');
+        }
+      });
     }
   }
 

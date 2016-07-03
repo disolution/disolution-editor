@@ -24,12 +24,22 @@ export default class ProjectHistory extends React.Component {
     this.getCommits();
   }
 
+  componentWillUnmount() {
+    if(this.listener) {
+      this.listener.removeListener('commit', this.addCommit);
+    }
+  }
+
   getCommits = () => {
     const { props: { project: { localPath } } } = this;
-    folders.listenCommits(localPath, (commit) => {
-      this.setState({
-        commits: [...this.state.commits, commit]
-      });
+    folders.listenCommits(localPath, this.addCommit).then(history => {
+      this.listener = history;
+    });
+  }
+
+  addCommit = commit => {
+    this.setState({
+      commits: [...this.state.commits, commit]
     });
   }
 
@@ -43,7 +53,11 @@ export default class ProjectHistory extends React.Component {
             key={i}
             innerDivStyle={{ padding: '10px 5px 10px 50px' }}
             leftAvatar={
-              <Avatar style={{ top: 10, left: 10 }} size={30} src={gravatar.url(commit.author().email(), { protocol: 'https', s: 30 })} />
+              <Avatar
+                style={{ top: 10, left: 10 }}
+                size={30}
+                src={gravatar.url(commit.author().email(), { protocol: 'https', s: 30 })}
+              />
             }
             primaryText={String(commit.summary())}
             secondaryText={`${String(commit.sha().slice(0, 7))} - ${moment(commit.date()).fromNow()} by ${String(commit.author().name())}`}
