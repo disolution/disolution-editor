@@ -1,7 +1,7 @@
 {
-  "name": "disolution-app",
-  "productName": "Disolution",
-  "version": "0.0.1",
+  "name": "molecule",
+  "productName": "Molecule",
+  "version": "0.0.2",
   "description": "DOCN git projects editor and viewer",
   "main": "main.js",
   "scripts": {
@@ -25,12 +25,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/disolution/disolution-app.git"
+    "url": "git+https://github.com/disolution/molecule.git"
   },
   "author": "Henry Kehlmann <henry@blooob.me> (https://github.com/madhenry)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/disolution/disolution-app/issues"
+    "url": "https://github.com/disolution/molecule/issues"
   },
   "keywords": [
     "disolution",
@@ -44,7 +44,7 @@
     "webpack",
     "react-hot"
   ],
-  "homepage": "https://disolution.github.io/disolution-app",
+  "homepage": "https://disolution.github.io/molecule",
   "devDependencies": {
     "asar": "^0.11.0",
     "babel-core": "^6.9.0",

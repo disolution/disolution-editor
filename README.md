@@ -1,10 +1,10 @@
-# Disolution [v0.0.1]
-[![Build Status](https://travis-ci.org/disolution/disolution-app.svg?branch=master)](https://travis-ci.org/disolution/disolution-app)
+# Molecule [v0.0.2]
+[![Build Status](https://travis-ci.org/disolution/molecule.svg?branch=master)](https://travis-ci.org/disolution/molecule)
 ### Distributed project development collaboration app based on DOCN specification
 Basically like open-source Github **discussion threads (issues)** but stored in a git repository using the flexible **DOCN** spec format (human & machine readable json & markdown). Made for all kinds of projects that need organized discussions.
 
 
-![](https://raw.githubusercontent.com/disolution/disolution-app/gh-pages/screenshots/screenshot_v0.png)
+![](https://raw.githubusercontent.com/disolution/molecule/gh-pages/screenshots/screenshot_v0.png)
 
 There are no prebuilt binaries for now. Only tested on Mac OS X.
 
@@ -31,19 +31,19 @@ Feel free to help out with the development and discussions.
 ### Stack
 * React, Redux, Material-UI, nodegit, Markdown editor etc - packaged as a simple cross-platform desktop app using Electron
 
-#### Current functionality
+#### Features
 * Nice Markdown editor
 * Create a new DOCN project repository ( project.json, README.md + optional cover-image.ext )
 * Possible to import existing DOCN git repos as projects.
 * GIT powers - soon to be integrated into the app ( you can use Github app or SourceTree for now )
 
-#### In the works
+#### Coming features
 * Creating human and machine readable threads in folders
 * Clone project from a remote GIT URL in the app
 * Manage project remotes
 * Automatic but configurable git push / pull for faster iteration
 
-#### Future of Distributed Collaboration
+#### Possible future of Open Science Collaboration
 * Co-authoring ( managing and linking team members in the repo )
 * Threads - discussion topics
 * Integration with github issues, discourse forums. Pulling the most useful developing comments and ideas from external sources to the main project repo for stored and reliable credit proofs.
@@ -51,7 +51,7 @@ Feel free to help out with the development and discussions.
 * Linking threads to other threads in other projects
 * Guides on how to setup automatic tests / jobs using CI for special project needs
 
-The possibilities are endless!
+Endless possibilities.
 
 \* Check the disolution/project-docn repository for a more detailed explanation of the DOCN spec and overall project.
 
