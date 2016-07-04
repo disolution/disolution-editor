@@ -184,7 +184,7 @@ export default class ProjectEditor extends React.Component {
       chainStart
         .then(() => openRepo(project.localPath))
         .then(repo =>
-          commit(repo, 'Project update in Disolution',
+          commit(repo, 'Project update in Molecule',
             { name: gitAuthor || '', email: gitEmail || '' }, repoFiles)
         );
     }

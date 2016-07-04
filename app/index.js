@@ -11,7 +11,7 @@ import { persistStore } from 'redux-persist';
 import localForage from 'localForage';
 localForage.config({
     driver      : localForage.INDEXEDDB,
-    name        : 'Disolution',
+    name        : 'Molecule',
     storeName   : 'app_db',
     description : 'Contains configured listing of project repositories'
 });

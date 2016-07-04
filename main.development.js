@@ -23,7 +23,7 @@ const handleRedirect = function(e, url) {
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
-    title: 'Disolution',
+    title: 'Molecule',
     show: true,
     width: 1024,
     height: 728,
@@ -54,9 +54,9 @@ app.on('ready', () => {
 
   if (process.platform === 'darwin') {
     template = [{
-      label: 'Disolution',
+      label: 'Molecule',
       submenu: [{
-        label: 'About Disolution',
+        label: 'About Molecule',
         selector: 'orderFrontStandardAboutPanel:'
       }, {
         type: 'separator'
@@ -66,7 +66,7 @@ app.on('ready', () => {
       }, {
         type: 'separator'
       }, {
-        label: 'Hide Disolution',
+        label: 'Hide Molecule',
         accelerator: 'Command+H',
         selector: 'hide:'
       }, {
@@ -167,7 +167,7 @@ app.on('ready', () => {
       }, {
         label: 'Community Discussions',
         click() {
-          shell.openExternal('https://github.com/disolution/disolution-app/issues');
+          shell.openExternal('https://github.com/disolution/molecule/issues');
         }
       }]
     }];
@@ -224,7 +224,7 @@ app.on('ready', () => {
       }, {
         label: 'Community Discussions',
         click() {
-          shell.openExternal('https://github.com/disolution/disolution-app/issues');
+          shell.openExternal('https://github.com/disolution/molecule/issues');
         }
       }]
     }];
