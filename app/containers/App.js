@@ -93,7 +93,8 @@ export default class App extends Component {
       </span>
     );
 
-    const headerIconColor = getLuminance(selectedTheme.palette.primary1Color) > 0.6 ? black : fullWhite;
+    const headerIconColor = getLuminance(selectedTheme.palette.primary1Color) > 0.6 ?
+      black : fullWhite;
 
     return (
       <MuiThemeProvider muiTheme={selectedTheme}>
@@ -105,7 +106,12 @@ export default class App extends Component {
                 title={appTitle}
                 showMenuIconButton={(currentPath.trim() !== '/')}
                 iconElementLeft={currentPath.trim() !== '/' ?
-                    (<IconButton onClick={() => hashHistory.push({ path: '/', state: { transition: 'slideLeft' } })}>
+                    (<IconButton
+                      onClick={() => hashHistory.push({
+                        path: '/',
+                        state: { transition: 'slideLeft' }
+                      })}
+                    >
                       <BackIcon color={headerIconColor} />
                     </IconButton>)
                   : undefined
