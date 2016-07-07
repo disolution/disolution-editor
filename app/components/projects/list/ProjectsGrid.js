@@ -73,9 +73,11 @@ export default class ProjectsGrid extends Component {
     return (
       <Grid fluid style={viewHeight}>
         <Row center="xs" middle="xs" style={viewHeight}>
-          <Col key="message" xs={12}>
-            {messageCol}
-          </Col>
+          {messageCol.length ?
+            <Col key="message" xs={12}>
+              {messageCol}
+            </Col>
+          : ''}
           {projectItems}
         </Row>
       </Grid>
