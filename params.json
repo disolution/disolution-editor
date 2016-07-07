@@ -1,6 +1,6 @@
 {
-  "name": "Disolution",
-  "tagline": "Decentralized project editor for easy open collaboration using git repositories",
-  "body": "![](https://raw.githubusercontent.com/disolution/disolution-app/gh-pages/screenshots/screenshot_v0.png)",
+  "name": "Molecule",
+  "tagline": "Distributed projects editor for easy open collaboration using the DOCN specification",
+  "body": "![](https://raw.githubusercontent.com/disolution/molecule/gh-pages/screenshots/screenshot_v0.png)",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
