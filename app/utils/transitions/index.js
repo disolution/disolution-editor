@@ -2,7 +2,7 @@ import { spring } from 'react-motion';
 
 const fadeConfig = { stiffness: 120, damping: 22 };
 const popConfig = { stiffness: 360, damping: 15 };
-const slideConfig = { stiffness: 350, damping: 20 };
+const slideConfig = { stiffness: 400, damping: 20 };
 
 function mapStyles({ opacity, offset, scale }) {
   let m = {};

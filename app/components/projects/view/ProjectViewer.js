@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import reactMixin from 'react-mixin';
+import TimerMixin from 'react-timer-mixin';
 import ReactMarkdown from 'react-markdown';
 import { IndexLink, hashHistory } from 'react-router';
 import ProjectActions from './ProjectActions';
@@ -42,17 +44,19 @@ export default class ProjectViewer extends React.Component {
   componentDidMount() {
     const { props: { project: { id, localPath }, getRemotes, notify, save } } = this;
 
-    if(localPath) {
-      getRemotes({ id, localPath });
-      folders.findProjectInPath(localPath).then(scannedProject => {
-        if(scannedProject) {
-          save({ ...scannedProject, localPath });
-        } else {
-          notify('Have you moved or deleted the project folder? Please import it again.');
-        }
-      });
-      folders.getProjectStatus(localPath).then(files => save({ id, files }));
-    }
+    this.setTimeout(() => {
+      if(localPath) {
+        getRemotes({ id, localPath });
+        folders.findProjectInPath(localPath).then(scannedProject => {
+          if(scannedProject) {
+            save({ ...scannedProject, localPath });
+          } else {
+            notify('Have you moved or deleted the project folder? Please import it again.');
+          }
+        });
+        folders.getProjectStatus(localPath).then(files => save({ id, files }));
+      }
+    }, 600);
   }
 
   todoCheck = (done, value) => {
@@ -145,3 +149,5 @@ export default class ProjectViewer extends React.Component {
     );
   }
 }
+
+reactMixin(ProjectViewer.prototype, TimerMixin);
