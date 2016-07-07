@@ -1,4 +1,4 @@
-import { ADD_PROJECT, SAVE_PROJECT } from '../actions/projects';
+import { ADD_PROJECT } from '../actions/projects';
 import { UPDATE_SETTINGS } from '../actions/settings';
 import { CLEAR_MESSAGE, ADD_MESSAGE } from '../actions/notifications';
 

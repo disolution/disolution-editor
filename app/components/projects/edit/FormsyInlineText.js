@@ -3,6 +3,7 @@ import keycode from 'keycode';
 import Formsy from 'formsy-react';
 import TextField from 'material-ui/TextField';
 
+/* eslint-disable react/prefer-es6-class */
 const FormsyInlineText = React.createClass({
 
   propTypes: {
@@ -50,5 +51,6 @@ const FormsyInlineText = React.createClass({
     );
   },
 });
+/* eslint-enable react/prefer-es6-class */
 
 export default FormsyInlineText;

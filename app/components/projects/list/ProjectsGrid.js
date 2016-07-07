@@ -55,24 +55,27 @@ export default class ProjectsGrid extends Component {
       </Col>)
     );
 
+    let messageCol = '';
+    if(!projects.length) {
+      messageCol = (
+        <div>
+          <ArrowIcon style={{ float: 'right', width: 30, height: 30 }} />
+          <h3>{"Seems pretty empty. Start a new project"}</h3>
+        </div>
+      );
+    } else if(projects.length === 1) {
+      messageCol = (
+        <div>
+          <h3>{"Here's your first git project. Make it awesome."}</h3>
+        </div>
+      );
+    }
     return (
       <Grid fluid style={viewHeight}>
         <Row center="xs" middle="xs" style={viewHeight}>
-          {!projects.length ?
-            <Col key="new_project" xs>
-              <div>
-                <ArrowIcon style={{ float: 'right', width: 30, height: 30 }} />
-                <h3>{"Seems pretty empty. Start a new project"}</h3>
-              </div>
-            </Col>
-          : (projects.length === 1 ?
-            <Col key="make_awesome" xs>
-              <div>
-                <h3>{"Here's your first git project. Make it awesome."}</h3>
-              </div>
-            </Col>
-          : '')}
-
+          <Col key="message" xs={12}>
+            {messageCol}
+          </Col>
           {projectItems}
         </Row>
       </Grid>

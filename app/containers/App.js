@@ -7,8 +7,8 @@ import { StickyContainer, Sticky } from 'react-sticky';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+// import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+// import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import { getLuminance } from 'material-ui/utils/colorManipulator';
 import { AppBar, IconButton, IconMenu, MenuItem } from 'material-ui';
 import AddIcon from 'material-ui/svg-icons/action/note-add';
@@ -93,7 +93,8 @@ export default class App extends Component {
       </span>
     );
 
-    const headerIconColor = getLuminance(selectedTheme.palette.primary1Color) > 0.6 ? black : fullWhite;
+    const headerIconColor = getLuminance(selectedTheme.palette.primary1Color) > 0.6 ?
+      black : fullWhite;
 
     return (
       <MuiThemeProvider muiTheme={selectedTheme}>
@@ -105,7 +106,11 @@ export default class App extends Component {
                 title={appTitle}
                 showMenuIconButton={(currentPath.trim() !== '/')}
                 iconElementLeft={currentPath.trim() !== '/' ?
-                    (<IconButton onClick={() => hashHistory.push({ path: '/', state: { transition: 'slideLeft' } })}>
+                    (<IconButton
+                      onClick={() =>
+                        hashHistory.push({ path: '/', state: { transition: 'slideLeft' }
+                      })}
+                    >
                       <BackIcon color={headerIconColor} />
                     </IconButton>)
                   : undefined

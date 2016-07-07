@@ -9,12 +9,12 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import {
   RaisedButton as Button,
-  Subheader,
   Paper
 } from 'material-ui';
-import ActionFavorite from 'material-ui/svg-icons/action/favorite';
-import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
-import { grey900, grey600, indigo800, red800, blue800, brown800, white, black } from 'material-ui/styles/colors';
+import {
+  grey900, grey600, indigo800,
+  red800, blue800, brown800
+} from 'material-ui/styles/colors';
 
 export default class SettingsForm extends React.Component {
 
@@ -25,16 +25,14 @@ export default class SettingsForm extends React.Component {
 
   static defaultProps = {
     settings: {},
-    update: (settings) => {
-      console.warn('Please provide a cb for submit', settings);
-    }
+    update: () => false
   }
 
   submit = (settings) => {
     this.props.update(settings);
   }
 
-  render () {
+  render() {
     const { props: { settings: {
       gitAuthor,
       gitEmail,
@@ -44,17 +42,19 @@ export default class SettingsForm extends React.Component {
     return (
       <Grid fluid style={viewHeight}>
         <Row center="xs" middle="xs" style={viewHeight}>
-          <Col xs={12} sm={6} md={4} style={{textAlign: 'left'}}>
+          <Col xs={12} sm={6} md={4} style={{ textAlign: 'left' }}>
             <Paper style={{ padding: '1em' }}>
               <Form onSubmit={this.submit}>
                 <h3>Git author public information</h3>
                 <Text name="gitAuthor" value={gitAuthor} floatingLabelText="Name" />
-                <br/>
+                <br />
                 <Text name="gitEmail" value={gitEmail} floatingLabelText="Email" />
-                <br/><br/>
-                <Button type="submit"
+                <br /><br />
+                <Button
+                  type="submit"
                   label="Update"
-                  primary={true} />
+                  primary
+                />
               </Form>
               <Form onChange={this.submit}>
                 <h3>Customize main color</h3>
@@ -62,32 +62,32 @@ export default class SettingsForm extends React.Component {
                   <RadioButton
                     value={grey900}
                     label="Dark"
-                    iconStyle={{fill: grey900}}
+                    iconStyle={{ fill: grey900 }}
                   />
                   <RadioButton
                     value={grey600}
                     label="Lightgray"
-                    iconStyle={{fill: grey600}}
+                    iconStyle={{ fill: grey600 }}
                   />
                   <RadioButton
                     value={indigo800}
                     label="Indigo"
-                    iconStyle={{fill: indigo800}}
+                    iconStyle={{ fill: indigo800 }}
                   />
                   <RadioButton
                     value={red800}
                     label="Red"
-                    iconStyle={{fill: red800}}
+                    iconStyle={{ fill: red800 }}
                   />
                   <RadioButton
                     value={blue800}
                     label="Blue"
-                    iconStyle={{fill: blue800}}
+                    iconStyle={{ fill: blue800 }}
                   />
                   <RadioButton
                     value={brown800}
                     label="Brown"
-                    iconStyle={{fill: brown800}}
+                    iconStyle={{ fill: brown800 }}
                   />
                 </RadioButtonGroup>
               </Form>

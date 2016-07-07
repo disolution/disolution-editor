@@ -44,7 +44,7 @@ export default class ProjectHistory extends React.Component {
   }
 
   render() {
-    const { props: { project }, state: { commits } } = this;
+    const { state: { commits } } = this;
 
     return (
       <List>
@@ -60,7 +60,10 @@ export default class ProjectHistory extends React.Component {
               />
             }
             primaryText={String(commit.summary())}
-            secondaryText={`${String(commit.sha().slice(0, 7))} - ${moment(commit.date()).fromNow()} by ${String(commit.author().name())}`}
+            secondaryText={
+`${String(commit.sha().slice(0, 7))} - ${moment(commit.date()).fromNow()} by
+${String(commit.author().name())}`
+            }
           />
         ))}
       </List>
