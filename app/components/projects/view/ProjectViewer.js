@@ -22,7 +22,6 @@ import BackIcon from 'material-ui/svg-icons/navigation/arrow-back';
 import ProjectIcon from 'material-ui/svg-icons/action/toc';
 
 import * as renderers from '../../markdown/Renderers';
-import * as folders from '../../../utils/folders';
 
 export default class ProjectViewer extends React.Component {
 
@@ -30,8 +29,7 @@ export default class ProjectViewer extends React.Component {
     children: PropTypes.node,
     projects: PropTypes.array,
     project: PropTypes.object,
-    getRemotes: PropTypes.func,
-    notify: PropTypes.func,
+    saveProjectFromPath: PropTypes.func,
     remove: PropTypes.func,
     save: PropTypes.func
   };
@@ -42,21 +40,13 @@ export default class ProjectViewer extends React.Component {
   };
 
   componentDidMount() {
-    const { props: { project: { id, localPath }, getRemotes, notify, save } } = this;
+    const { props: { project: { localPath }, saveProjectFromPath } } = this;
 
-    this.setTimeout(() => {
-      if(localPath) {
-        getRemotes({ id, localPath });
-        folders.findProjectInPath(localPath).then(scannedProject => {
-          if(scannedProject) {
-            save({ ...scannedProject, localPath });
-          } else {
-            notify('Have you moved or deleted the project folder? Please import it again.');
-          }
-        });
-        folders.getProjectStatus(localPath).then(files => save({ id, files }));
-      }
-    }, 600);
+    if(localPath) {
+      this.setTimeout(() => {
+        saveProjectFromPath({ localPath });
+      }, 600);
+    }
   }
 
   todoCheck = (done, value) => {

@@ -25,15 +25,42 @@ export function remove(project) {
   };
 }
 
-export function getRemotes({ id, localPath }) {
+export function saveRemotes({ id, localPath }) {
   return dispatch => {
     if(localPath) {
-      folders.getProjectRemotes(localPath)
+      return folders.getProjectRemotes(localPath)
       .then(remotes => dispatch(save({
         id, remotes
       })));
-    } else {
-      return Promise.reject(new Error('Project missing a local path to scan for git remotes'));
     }
   };
+}
+
+export function saveFileStatuses({ id, localPath }) {
+  return dispatch =>
+    folders.getProjectStatus(localPath)
+    .then(files => dispatch(save({
+      id, files
+    })));
+}
+
+export function saveProjectFromPath({ localPath }) {
+  let loadedProject;
+  return dispatch =>
+    folders.findProjectInPath(localPath)
+    .then(project => {
+      loadedProject = project;
+      return project ? folders.getProjectRemotes(localPath) : Promise.reject();
+    })
+    .then(remotes => {
+      loadedProject.remotes = remotes;
+      return folders.getProjectStatus(localPath);
+    })
+    // Finally save all together
+    .then(files => {
+      loadedProject.files = files;
+      return dispatch(save({
+        ...loadedProject, localPath
+      }));
+    });
 }

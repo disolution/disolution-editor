@@ -24,6 +24,12 @@ const DEFAULT_OPTS = {
   dir: './',
   name: appName,
   asar: shouldUseAsar,
+  protocols: [
+    {
+      name: pkg.appName,
+      schemes: [pkg.name]
+    }
+  ],
   ignore: [
     '^/test($|/)',
     '^/tools($|/)',

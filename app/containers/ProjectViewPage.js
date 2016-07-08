@@ -2,7 +2,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ProjectViewer from '../components/projects/view/ProjectViewer';
 import * as ProjectActions from '../actions/projects';
-import * as NotificationActions from '../actions/notifications';
 
 function mapStateToProps(state, ownProps) {
   const { projects } = state;
@@ -14,7 +13,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ ...ProjectActions, ...NotificationActions }, dispatch);
+  return bindActionCreators({ ...ProjectActions }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectViewer);
