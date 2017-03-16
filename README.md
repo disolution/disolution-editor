@@ -1,4 +1,6 @@
 # Molecule [v0.0.2]
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/disolution/molecule.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/disolution/molecule.svg?branch=master)](https://travis-ci.org/disolution/molecule)
 ### Distributed project development collaboration app based on DOCN specification
 Basically like open-source Github **discussion threads (issues)** but stored in a git repository using the flexible **DOCN** spec format (human & machine readable json & markdown). Made for all kinds of projects that need organized discussions.
